@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement class="screen" name="game">
+        <ui:Label text="Game" />
+    </ui:VisualElement>
+
+    <ui:VisualElement class="screen" name="title">
+        <ui:Label text="GGJ 2022!" />
+    </ui:VisualElement>
+</ui:UXML>

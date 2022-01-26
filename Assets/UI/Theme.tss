@@ -1,0 +1,14 @@
+@import url("unity-theme://default");
+
+.screen {
+    /* UIService.ShowScreen handles displaying screens. */
+    display: none;
+}
+
+#game Label {
+    color: blue;
+}
+
+#title Label {
+    color: red;
+}
