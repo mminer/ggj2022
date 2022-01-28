@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Terrain
+    uniqueID: 3386722197
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

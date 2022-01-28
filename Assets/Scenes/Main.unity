@@ -254,6 +254,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4660878908303508765, guid: e40c7560cda6d4a22bd9c8d7ad537aae, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660878908303508765, guid: e40c7560cda6d4a22bd9c8d7ad537aae, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e40c7560cda6d4a22bd9c8d7ad537aae, type: 3}
 --- !u!1 &519420028
@@ -490,8 +498,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -908245099
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -546,6 +554,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: tile
+      value: 
+      objectReference: {fileID: 11400000, guid: 7a34f628b4630428dac98d2f38de5677, type: 2}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: tilemap
+      value: 
+      objectReference: {fileID: 1760482963}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: groundTile
+      value: 
+      objectReference: {fileID: 11400000, guid: 8c5249fdbea9f419cbbc2adf2dbfff87, type: 2}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: roomMaxSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: roomMinSize
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: notGroundTile
+      value: 
+      objectReference: {fileID: 11400000, guid: 86ab93059e9f54cf9bd1f7f25503162b, type: 2}
     - target: {fileID: 4943750545281595632, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -593,6 +625,10 @@ PrefabInstance:
     - target: {fileID: 4943750545281595638, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: m_Name
       value: Services
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017077321619337736, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b63d1966db784dd682733e384159c3a, type: 3}

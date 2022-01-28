@@ -10,34 +10,34 @@ class PlayerMovement : MonoBehaviour
 
         if (keyboard.downArrowKey.wasPressedThisFrame)
         {
-            Move(Vector2Int.down);
+            Move(Vector3Int.down);
         }
 
         if (keyboard.leftArrowKey.wasPressedThisFrame)
         {
-            Move(Vector2Int.left);
+            Move(Vector3Int.left);
         }
 
         if (keyboard.rightArrowKey.wasPressedThisFrame)
         {
-            Move(Vector2Int.right);
+            Move(Vector3Int.right);
         }
 
         if (keyboard.upArrowKey.wasPressedThisFrame)
         {
-            Move(Vector2Int.up);
+            Move(Vector3Int.up);
         }
     }
 
-    void Move(Vector2Int delta)
+    void Move(Vector3Int delta)
     {
-        var targetTilePosition = Vector2Int.FloorToInt(transform.position) + delta;
+        var targetTilePosition = Vector3Int.FloorToInt(transform.position) + delta;
 
         if (!Services.Get<MapService>().CanMoveToTile(targetTilePosition))
         {
             return;
         }
 
-        transform.position = (Vector2)targetTilePosition;
+        transform.position = targetTilePosition;
     }
 }

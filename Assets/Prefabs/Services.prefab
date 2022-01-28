@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4943750545281595632}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2774270832310361764
 MonoBehaviour:
@@ -92,8 +92,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4943750546903676442}
-  - {fileID: 6715449064914194547}
   - {fileID: 6017077321619337736}
+  - {fileID: 6715449064914194547}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -280,7 +280,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4943750545281595632}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1781761410
 MonoBehaviour:
@@ -294,3 +294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c07920db741d4f969aac79dfed04ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tilemap: {fileID: 0}
+  tile: {fileID: 0}
+  maxRooms: 30
+  roomMaxSize: 3
+  roomMinSize: 10
