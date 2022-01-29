@@ -16,9 +16,16 @@ class MapService : Services.Service
 
     Map map;
 
-    public void Start()
+    public bool CanMoveToTile(Vector3Int targetTilePosition)
+    {
+        // TODO
+        return true;
+    }
+
+    public void GenerateMap()
     {
         var mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(32, 32, maxRooms, roomMaxSize, roomMinSize);
+        //var mapCreationStrategy = new CaveMapCreationStrategy<Map>(32, 32, 50, 4, 3);
         map = Map.Create(mapCreationStrategy);
         Debug.Log($"Generated map: \n{map}");
 
@@ -34,11 +41,5 @@ class MapService : Services.Service
                 tilemap.SetTile(tilePosition, cell.IsWalkable ? groundTile : notGroundTile);
             }
         }
-    }
-
-    public bool CanMoveToTile(Vector3Int targetTilePosition)
-    {
-        // TODO
-        return true;
     }
 }

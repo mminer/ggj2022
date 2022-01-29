@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4943750545281595632}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2774270832310361764
 MonoBehaviour:
@@ -62,6 +62,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultScreenName: title
+--- !u!1 &4287173784685381179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7426297924659432838}
+  - component: {fileID: 3948717000569549334}
+  m_Layer: 0
+  m_Name: GameService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7426297924659432838
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4287173784685381179}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4943750545281595632}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3948717000569549334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4287173784685381179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3cb5d8609eb443a7a2c426774fe211c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 4612896015496430383, guid: e40c7560cda6d4a22bd9c8d7ad537aae, type: 3}
 --- !u!1 &4943750545281595638
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +137,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4943750546903676442}
+  - {fileID: 7426297924659432838}
   - {fileID: 6017077321619337736}
   - {fileID: 6715449064914194547}
   m_Father: {fileID: 0}
@@ -280,7 +326,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4943750545281595632}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1781761410
 MonoBehaviour:
@@ -295,7 +341,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 0}
-  tile: {fileID: 0}
   maxRooms: 30
-  roomMaxSize: 3
-  roomMinSize: 10
+  roomMaxSize: 10
+  roomMinSize: 3
+  groundTile: {fileID: 11400000, guid: 8c5249fdbea9f419cbbc2adf2dbfff87, type: 2}
+  notGroundTile: {fileID: 11400000, guid: 86ab93059e9f54cf9bd1f7f25503162b, type: 2}
