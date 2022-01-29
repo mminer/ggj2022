@@ -199,8 +199,6 @@ public class Dungeon
         throw new NotImplementedException();
     }
 
-    System.Collections.ObjectModel.ReadOnlyCollection<Cell> currentVisible;
-
     public void RegenerateVisible(Vector3Int at, int radius) 
     {
         fov?.ComputeFov(at.x, at.y, radius, true).ToArray();
