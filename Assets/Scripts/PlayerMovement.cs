@@ -64,12 +64,12 @@ public class PlayerMovement : MonoBehaviour
                 switch (item.Value.itemType)
                 {
                     case ItemType.Exit:
-                        Services.Get<GameService>().EndGame(ItemType.Exit);
+                        Services.Get<GameService>().EndGame(EndCondition.Won);
                         break;
 
                     case ItemType.Pit:
                         Services.Get<AudioService>().PlayTrap(ItemType.Pit);
-                        Services.Get<GameService>().EndGame(ItemType.Pit);
+                        Services.Get<GameService>().EndGame(EndCondition.FellInPit);
                         break;
                 }
             }

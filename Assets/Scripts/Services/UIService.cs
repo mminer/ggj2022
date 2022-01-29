@@ -31,22 +31,21 @@ public class UIService : Services.Service
 
         gameService.OnGameEnded += (endCondition) =>
         {
-            // Player quit the game
-            if (endCondition == ItemType.None)
+            if (endCondition == EndCondition.Quit)
             {
                 return;
             }
             // Choose the corner opposite the player spawn position for the exit.
             var causeOfDeath = endCondition switch
             {
-                _ when endCondition == ItemType.Pit => "Fell into a pit",
-                _ when endCondition == ItemType.Passcode => "Insulted the Gods with a bad glyph combination",
-                _ when endCondition == ItemType.Exit => "",
+                _ when endCondition == EndCondition.FellInPit => "Fell into a pit",
+                _ when endCondition == EndCondition.BadPasscode => "Insulted the Gods",
+                _ when endCondition == EndCondition.Won => "",
                 _ => throw new ArgumentOutOfRangeException(),
             };
 
             rootVisualElement.Q<Label>("results-message").text = causeOfDeath;
-            var title = endCondition == ItemType.Exit ? "Winner!" : "Womp, womp, you lose!";
+            var title = endCondition == EndCondition.Won ? "Winner!" : "Womp, womp, you lose!";
             rootVisualElement.Q<Label>("results-title").text = title;
             ShowScreen("results");
         };
@@ -54,7 +53,7 @@ public class UIService : Services.Service
         // General button events
         rootVisualElement.Q<Button>("join-back").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("game-quit").clicked += () => {
-            Services.Get<GameService>().EndGame(ItemType.None);
+            Services.Get<GameService>().EndGame(EndCondition.Quit);
             ShowScreen("title");
         };
         rootVisualElement.Q<Button>("results-quit").clicked += () => { ShowScreen("title"); };
@@ -159,7 +158,6 @@ public class UIService : Services.Service
 
     private static void UpdateGlyph(Image image, TextField input, int index, Sprite[] sprites)
     {
-        // image.image = sprites[index].texture;
         image.sprite = sprites[index];
         input.value = index.ToString();
     }

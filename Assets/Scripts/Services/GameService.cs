@@ -2,6 +2,14 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public enum EndCondition
+{
+    Won,
+    Quit,
+    FellInPit,
+    BadPasscode,
+}
+
 public class GameService : Services.Service
 {
     [SerializeField] GameObject playerPrefab;
@@ -9,7 +17,7 @@ public class GameService : Services.Service
     public delegate void OnGameStartedHandler(string gameCode);
     public event OnGameStartedHandler OnGameStarted;
 
-    public delegate void OnGameEndedHandler(ItemType endCondition);
+    public delegate void OnGameEndedHandler(EndCondition endCondition);
     public event OnGameEndedHandler OnGameEnded;
 
     public Player playerAssignment { get; private set; } = Player.None;
@@ -57,7 +65,7 @@ public class GameService : Services.Service
         OnGameStarted?.Invoke(code);
     }
 
-    public void EndGame(ItemType endCondition)
+    public void EndGame(EndCondition endCondition)
     {
         OnGameEnded?.Invoke(endCondition);
         Destroy(player);
@@ -66,6 +74,6 @@ public class GameService : Services.Service
     private void OnSubmitGlyphs(int[] combo)
     {
         Debug.Log("TODO: check if combo is expected");
-        EndGame(ItemType.Passcode);
+        EndGame(EndCondition.BadPasscode);
     }
 }
