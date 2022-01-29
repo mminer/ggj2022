@@ -12,7 +12,8 @@ class GameService : Services.Service
     public delegate void OnGameEndedHandler(bool isWinner);
     public event OnGameEndedHandler OnGameEnded;
 
-    bool isPlayer1 = true;
+    public Player playerAssignment { get; private set; } = Player.None;
+
     GameObject player;
 
     public void StartGame(string code = null)
@@ -22,14 +23,18 @@ class GameService : Services.Service
         // We don't want this to happen, so randomize it now.
         Random.InitState((int)DateTime.Now.Ticks);
 
-        if (code != null)
+        if (code == null)
         {
-            isPlayer1 = false;
+            playerAssignment = Player.Player1;
+            Debug.Log($"Playing as player 1");
+
+            code = GameCodeUtility.GenerateGameCode();
+            Debug.Log($"Generated code: {code}");
         }
         else
         {
-            code = GameCodeUtility.GenerateGameCode();
-            Debug.Log($"Generated code: {code}");
+            playerAssignment = Player.Player2;
+            Debug.Log($"Playing as player 2");
         }
 
         var dungeonService = Services.Get<DungeonService>();

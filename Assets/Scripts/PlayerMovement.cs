@@ -29,7 +29,7 @@ class PlayerMovement : MonoBehaviour
     void OnDoneMove(InputAction.CallbackContext context)
     {
         // clear the wait so that the next button press is instant
-        currentHoldWait = 0; 
+        currentHoldWait = 0;
         direction = Vector2.zero;
     }
 
@@ -38,32 +38,40 @@ class PlayerMovement : MonoBehaviour
         direction = context.ReadValue<Vector2>();
     }
 
-    private void Update() 
+    private void Update()
     {
         MoveLogic();
         currentHoldWait -= Time.deltaTime;
     }
 
-    private void MoveLogic() 
+    private void MoveLogic()
     {
         if(direction != Vector2.zero) {
             if(currentHoldWait > 0) { return; } // WAIT
             currentHoldWait = holdWait; // reset the waiting time when there's a successful movement.
-            
-            var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.RoundToInt(direction);
-            var dungeonService = Services.Get<DungeonService>();
 
-            if (!dungeonService.CanMoveToTile(targetTilePosition)) { return; }
+            var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.RoundToInt(direction);
+            var (isWalkable, item) = Services.Get<DungeonService>().dungeon[targetTilePosition];
+
+            if (!isWalkable) { return; }
 
             Services.Get<AudioService>().PlayFootstep();
 
             transform.position = targetTilePosition;
 
-            if (targetTilePosition == dungeonService.dungeon.exitPosition)
+            if (item.HasValue)
             {
-                Services.Get<GameService>().EndGame(true);
+                switch (item.Value.itemType)
+                {
+                    case ItemType.Exit:
+                        Services.Get<GameService>().EndGame(true);
+                        break;
+
+                    case ItemType.Pit:
+                        Services.Get<GameService>().EndGame(false);
+                        break;
+                }
             }
         }
     }
-
 }

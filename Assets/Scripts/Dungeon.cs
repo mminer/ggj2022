@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using RogueSharp;
 using RogueSharp.MapCreation;
@@ -9,18 +10,20 @@ using UnityEngine;
 /// </summary>
 class Dungeon
 {
-    public readonly Vector3Int exitPosition;
     public readonly Vector3Int playerSpawnPosition;
 
-    readonly Item[,] items;
     readonly Map map;
+    readonly Item?[,] items;
     readonly RandomNumberGenerator rng;
+    readonly Cell[] walkableCells;
 
-    public Cell this[Vector3Int position] => map[position.x, position.y];
+    public (bool isWalkable, Item? item) this[Vector3Int position] => (
+        map[position.x, position.y].IsWalkable,
+        items[position.x, position.y]);
 
-    public Dungeon(string gameCode, int width, int height, int maxRooms, int roomMaxSize, int roomMinSize)
+    public Dungeon(string gameCode, int width, int height, int maxRooms, int roomMaxSize, int roomMinSize, Dictionary<ItemType, int> itemCounts)
     {
-        items = new Item[width, height];
+        items = new Item?[width, height];
         rng = new RandomNumberGenerator(gameCode);
 
         var mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(
@@ -35,25 +38,13 @@ class Dungeon
 
         // Four corners inside the walls.
         var bottomLeft = new Vector3Int(1, 1);
-        var bottomRight = new Vector3Int(map.Width - 2, 1);
-        var topLeft = new Vector3Int(1, map.Height - 2);
-        var topRight = new Vector3Int(map.Width - 2, map.Height - 2);
-
-        var playerSpawnPositionPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
-        playerSpawnPosition = playerSpawnPositionPossibilities[rng.Next(playerSpawnPositionPossibilities.Length)];
-
-        // Choose the corner opposite the player spawn position for the exit.
-        exitPosition = playerSpawnPosition switch
-        {
-            _ when playerSpawnPosition == bottomLeft => topRight,
-            _ when playerSpawnPosition == bottomRight => topLeft,
-            _ when playerSpawnPosition == topLeft => bottomRight,
-            _ when playerSpawnPosition == topRight => bottomLeft,
-            _ => throw new ArgumentOutOfRangeException(),
-        };
+        var bottomRight = new Vector3Int(width - 2, 1);
+        var topLeft = new Vector3Int(1, height - 2);
+        var topRight = new Vector3Int(width - 2, height - 2);
 
         Vector3Int GetPathCarveDirection(Vector3Int position)
         {
+            // Diagonal away from the wall.
             return position switch
             {
                 _ when position == bottomLeft => Vector3Int.up + Vector3Int.right,
@@ -64,8 +55,57 @@ class Dungeon
             };
         }
 
+        // Player spawn position:
+
+        var playerSpawnPositionPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
+        playerSpawnPosition = playerSpawnPositionPossibilities[rng.Next(playerSpawnPositionPossibilities.Length)];
         CarvePathToEmptyTile(playerSpawnPosition, GetPathCarveDirection(playerSpawnPosition));
+
+        // Exit position:
+
+        // Choose the corner opposite the player spawn position for the exit.
+        var exitPosition = playerSpawnPosition switch
+        {
+            _ when playerSpawnPosition == bottomLeft => topRight,
+            _ when playerSpawnPosition == bottomRight => topLeft,
+            _ when playerSpawnPosition == topLeft => bottomRight,
+            _ when playerSpawnPosition == topRight => bottomLeft,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+
+        items[exitPosition.x, exitPosition.y] = new Item(ItemType.Exit, Player.Both);
         CarvePathToEmptyTile(exitPosition, GetPathCarveDirection(exitPosition));
+
+        // Item positions:
+
+        // Cache for later to speed up finding positions to place items.
+        walkableCells = map.GetAllCells().Where(cell => cell.IsWalkable).ToArray();
+
+        foreach (var kvp in itemCounts)
+        {
+            switch (kvp.Key)
+            {
+                case ItemType.Door:
+                    PlaceDoors(kvp.Value);
+                    break;
+
+                case ItemType.Key:
+                    PlaceKeys(kvp.Value);
+                    break;
+
+                case ItemType.Monster:
+                    PlaceMonsters(kvp.Value);
+                    break;
+
+                case ItemType.Pit:
+                    PlacePits(kvp.Value);
+                    break;
+
+                case ItemType.Weapon:
+                    PlaceWeapons(kvp.Value);
+                    break;
+            }
+        }
     }
 
     public override string ToString()
@@ -95,5 +135,63 @@ class Dungeon
 
             iteration++;
         }
+    }
+
+    Vector3Int GetRandomWalkablePosition()
+    {
+        while (true)
+        {
+            var cell = walkableCells[rng.Next(walkableCells.Length)];
+            return new Vector3Int(cell.X, cell.Y);
+        }
+    }
+
+    void PlaceDoors(int doorCount)
+    {
+        throw new NotImplementedException();
+    }
+
+    void PlaceKeys(int keyCount)
+    {
+        throw new NotImplementedException();
+    }
+
+    void PlaceMonsters(int monsterCount)
+    {
+        throw new NotImplementedException();
+    }
+
+    void PlacePits(int pitCount)
+    {
+        var placedPits = 0;
+
+        while (placedPits < pitCount)
+        {
+            var position = GetRandomWalkablePosition();
+
+            // Don't place a pit where another item has been placed.
+            if (items[position.x, position.y].HasValue)
+            {
+                continue;
+            }
+
+            // Ensure it's possible to walk around a pit.
+            var isPassable = map
+                .GetAdjacentCells(position.x, position.y, true)
+                .All(cell => cell.IsWalkable && !items[cell.X, cell.Y].HasValue);
+
+            if (!isPassable)
+            {
+                continue;
+            }
+
+            items[position.x, position.y] = new Item(ItemType.Pit, Player.Player2);
+            placedPits++;
+        }
+    }
+
+    void PlaceWeapons(int weaponCount)
+    {
+        throw new NotImplementedException();
     }
 }
