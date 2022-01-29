@@ -54,7 +54,8 @@ public class PlayerMovement : MonoBehaviour
             var (isWalkable, item) = Services.Get<DungeonService>().dungeon[targetTilePosition];
 
             if (!isWalkable) { return; }
-
+            
+            Services.Get<DungeonService>().RegenerateVisible(targetTilePosition);
             Services.Get<AudioService>().PlayFootstep();
 
             transform.position = targetTilePosition;

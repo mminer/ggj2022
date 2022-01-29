@@ -23,6 +23,9 @@ public class DungeonService : Services.Service
     [SerializeField] Tile pitTile;
     [SerializeField] Tile wallTile;
 
+    [SerializeField] private int visibleRadius = 3;
+    [SerializeField] private Color visibleColor = Color.white;
+
     public Dungeon dungeon { get; private set; }
 
     public void GenerateDungeon(string gameCode)
@@ -34,7 +37,8 @@ public class DungeonService : Services.Service
 
         dungeon = new Dungeon(gameCode, width, height, maxRooms, roomMaxSize, roomMinSize, itemCounts);
         Debug.Log($"Generated dungeon: \n{dungeon}");
-        SetTilesFromCells();
+
+        RegenerateVisible(dungeon.playerSpawnPosition);
     }
 
     Tile GetTile(Vector3Int tilePosition, Player playerAssignment)
@@ -60,7 +64,7 @@ public class DungeonService : Services.Service
         }
     }
 
-    void SetTilesFromCells()
+    void SetTilesFromCells(Vector3Int visiblePosition)
     {
         var playerAssignment = Services.Get<GameService>().playerAssignment;
 
@@ -70,8 +74,24 @@ public class DungeonService : Services.Service
             {
                 var tilePosition = new Vector3Int(x, y);
                 var tile = GetTile(tilePosition, playerAssignment);
+                
+                
+                var isVisible = dungeon.isVisible(tilePosition);
+                float distanceFromCharacter = Vector3Int.Distance(tilePosition, visiblePosition);
+
+                float hue, saturation;
+                Color.RGBToHSV(visibleColor, out hue, out saturation, out _);
+                var litColor = Color.HSVToRGB(hue, saturation, 1.0f - distanceFromCharacter / visibleRadius);
+
                 tilemap.SetTile(tilePosition, tile);
+                tilemap.SetTileFlags(tilePosition, TileFlags.None); // needed to change the color of a tile...
+                tilemap.SetColor(tilePosition, isVisible ? litColor : Color.black);
             }
         }
+    }
+
+    public void RegenerateVisible(Vector3Int position) {
+        dungeon.RegenerateVisible(position, visibleRadius);
+        SetTilesFromCells(position);
     }
 }

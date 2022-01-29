@@ -14,6 +14,7 @@ public class Dungeon
 
     readonly Item?[,] items;
     readonly Map map;
+    readonly FieldOfView fov;
     readonly RandomNumberGenerator rng;
     readonly Cell[] walkableCells;
 
@@ -106,6 +107,8 @@ public class Dungeon
                     break;
             }
         }
+
+        fov = new FieldOfView(map);
     }
 
     public override string ToString()
@@ -123,6 +126,7 @@ public class Dungeon
         while (!map[position.x, position.y].IsWalkable)
         {
             map[position.x, position.y].IsWalkable = true;
+            map[position.x, position.y].IsTransparent = true;
 
             if (iteration % 2 == 0)
             {
@@ -193,5 +197,17 @@ public class Dungeon
     void PlaceWeapons(int weaponCount)
     {
         throw new NotImplementedException();
+    }
+
+    System.Collections.ObjectModel.ReadOnlyCollection<Cell> currentVisible;
+
+    public void RegenerateVisible(Vector3Int at, int radius) 
+    {
+        fov?.ComputeFov(at.x, at.y, radius, true).ToArray();
+    }
+
+    public bool isVisible(Vector3Int at) 
+    {
+        return fov.IsInFov(at.x, at.y);
     }
 }

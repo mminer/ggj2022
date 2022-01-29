@@ -493,6 +493,10 @@ PrefabInstance:
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 1760482963}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: visibleRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4943750545281595632, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: m_RootOrder
       value: 0
