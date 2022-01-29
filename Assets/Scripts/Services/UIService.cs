@@ -36,6 +36,8 @@ class UIService : Services.Service
         rootVisualElement.Q<Button>("game-quit").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("results-quit").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("title-buttons-join").clicked += () => { ShowScreen("join"); };
+        rootVisualElement.Q<Button>("title-buttons-instructions").clicked += () => { ShowScreen("instructions"); };
+        rootVisualElement.Q<Button>("instructions-back").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("title-buttons-create").clicked += () =>
         {
             Services.Get<GameService>().StartGame();

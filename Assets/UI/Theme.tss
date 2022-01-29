@@ -10,6 +10,7 @@
     display: none;
     height: 100%;
     width: 100%;
+    color: white;
 }
 
 .full-screen {
@@ -94,4 +95,17 @@
 #results-title {
     font-size: 60px;
     color: white;
+}
+
+/* Instructions */
+#instructions-wrapper {
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+}
+
+#instructions-message {
+    white-space: normal;
+    -unity-text-align: middle-center;
+    font-size: 18px;
 }
