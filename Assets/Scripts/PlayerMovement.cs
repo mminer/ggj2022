@@ -3,36 +3,28 @@ using UnityEngine.InputSystem;
 
 class PlayerMovement : MonoBehaviour
 {
-    void Update()
+    [SerializeField] InputAction moveAction;
+
+    void Awake()
     {
-        // TODO: also support gamepads and WASD
-        var keyboard = Keyboard.current;
-
-        if (keyboard.downArrowKey.wasPressedThisFrame)
-        {
-            Move(Vector3Int.down);
-        }
-
-        if (keyboard.leftArrowKey.wasPressedThisFrame)
-        {
-            Move(Vector3Int.left);
-        }
-
-        if (keyboard.rightArrowKey.wasPressedThisFrame)
-        {
-            Move(Vector3Int.right);
-        }
-
-        if (keyboard.upArrowKey.wasPressedThisFrame)
-        {
-            Move(Vector3Int.up);
-        }
+        moveAction.performed += OnMove;
     }
 
-    void Move(Vector3Int delta)
+    void OnEnable()
     {
+        moveAction.Enable();
+    }
+
+    void OnDisable()
+    {
+        moveAction.Disable();
+    }
+
+    void OnMove(InputAction.CallbackContext context)
+    {
+        var direction = context.ReadValue<Vector2>();
+        var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.FloorToInt(direction);
         var mapService = Services.Get<MapService>();
-        var targetTilePosition = Vector3Int.FloorToInt(transform.position) + delta;
 
         if (!mapService.CanMoveToTile(targetTilePosition))
         {
