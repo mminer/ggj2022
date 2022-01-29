@@ -5,6 +5,8 @@ using RogueSharp;
 using RogueSharp.MapCreation;
 using UnityEngine;
 
+
+
 /// <summary>
 /// Represents an environment (a map + items).
 /// </summary>
@@ -18,13 +20,31 @@ public class Dungeon
     readonly Item?[,] items;
     readonly Map map;
     readonly FieldOfView fov;
+    public Dungeon.Light[] lights { private set; get; }
     readonly RandomNumberGenerator rng;
+
+    public struct Light {
+        private FieldOfView fov;
+        public readonly Vector3Int point;
+        public readonly int radius;
+
+        public Light(Vector3Int point, int radius, Map map) {
+            fov = new FieldOfView(map);
+            this.radius = radius;
+            this.point = point;
+            fov.ComputeFov(point.x, point.y, radius, true);
+        }
+
+        public bool isVisible(Vector3Int at) {
+            return fov.IsInFov(at.x, at.y);
+        }
+    }
 
     public (bool isWalkable, Item? item) this[Vector3Int position] => (
         map[position.x, position.y].IsWalkable,
         items[position.x, position.y]);
 
-    public Dungeon(string gameCode, int width, int height, int maxRooms, int roomMaxSize, int roomMinSize, Dictionary<ItemType, int> itemCounts)
+    public Dungeon(string gameCode, int width, int height, int maxRooms, int roomMaxSize, int roomMinSize, Dictionary<ItemType, int> itemCounts, int numberOfLights)
     {
         items = new Item?[width, height];
         rng = new RandomNumberGenerator(gameCode);
@@ -121,6 +141,8 @@ public class Dungeon
         }
 
         fov = new FieldOfView(map);
+
+        PlaceLights(numberOfLights);
     }
 
     public override string ToString()
@@ -222,9 +244,26 @@ public class Dungeon
         throw new NotImplementedException();
     }
 
-    public void RegenerateVisible(Vector3Int at, int radius)
+    private void PlaceLights(int lightCount) 
     {
-        fov?.ComputeFov(at.x, at.y, radius, true).ToArray();
+        lights = new Dungeon.Light[] {};
+
+        var placedLights = 0;
+
+        while (placedLights < lightCount)
+        {
+            var position = GetRandomWalkablePosition();
+            var light = new Dungeon.Light(position, rng.Next(5) + 2, map);
+
+            lights = lights.Append(light).ToArray();
+
+            placedLights++;
+        }
+    }
+
+    public void RegenerateVisible(Vector3Int at, int radius) 
+    {
+        fov.ComputeFov(at.x, at.y, radius, true);
     }
 
     public bool isVisible(Vector3Int at)

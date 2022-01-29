@@ -16,6 +16,10 @@ public class DungeonService : Services.Service
 
     [Header("Items")]
     [SerializeField] int pitCount = 5;
+    
+    [Header("Lights")]
+    [SerializeField] int lightCount = 5;
+    [SerializeField] private Color lightColor = Color.white;
 
     [Header("Tiles")]
     [SerializeField] Tile exitTile;
@@ -24,7 +28,6 @@ public class DungeonService : Services.Service
     [SerializeField] Tile wallTile;
 
     [SerializeField] private int visibleRadius = 3;
-    [SerializeField] private Color visibleColor = Color.white;
 
     public Dungeon dungeon { get; private set; }
 
@@ -35,7 +38,7 @@ public class DungeonService : Services.Service
             { ItemType.Pit, pitCount },
         };
 
-        dungeon = new Dungeon(gameCode, width, height, maxRooms, roomMaxSize, roomMinSize, itemCounts);
+        dungeon = new Dungeon(gameCode, width, height, maxRooms, roomMaxSize, roomMinSize, itemCounts, lightCount);
         Debug.Log($"Generated dungeon: \n{dungeon}");
 
         RegenerateVisible(dungeon.entrancePosition);
@@ -79,18 +82,43 @@ public class DungeonService : Services.Service
             {
                 var tilePosition = new Vector3Int(x, y);
                 var tile = GetTile(tilePosition, playerAssignment);
-
-
-                var isVisible = dungeon.isVisible(tilePosition);
-                float distanceFromCharacter = Vector3Int.Distance(tilePosition, visiblePosition);
-
-                float hue, saturation;
-                Color.RGBToHSV(visibleColor, out hue, out saturation, out _);
-                var litColor = Color.HSVToRGB(hue, saturation, 1.0f - distanceFromCharacter / visibleRadius);
-
+                
                 tilemap.SetTile(tilePosition, tile);
                 tilemap.SetTileFlags(tilePosition, TileFlags.None); // needed to change the color of a tile...
-                tilemap.SetColor(tilePosition, isVisible ? litColor : Color.black);
+
+                var tileColor = Color.black;
+
+                void mixLight (bool isVisible, Color color, Vector3Int fromPoint, float radius) 
+                {
+                    float distanceFromPoint = Vector3Int.Distance(tilePosition, fromPoint);
+
+                    float hue, saturation, tileBrightness;
+
+                    Color.RGBToHSV(tileColor, out _, out _, out tileBrightness);
+                    Color.RGBToHSV(color, out hue, out saturation, out _);
+
+                    // add the brightness of the lit tiles (an unlit black tile will have a brightness of 0)
+                    var brightness = (isVisible ? (1.0f - (distanceFromPoint - 1) / radius) : 0);
+                    tileColor = Color.HSVToRGB(hue, saturation, brightness + tileBrightness);
+                    
+                };
+
+                bool lightVisible = false;
+                
+                foreach(Dungeon.Light l in dungeon.lights) 
+                {
+                    var vis = l.isVisible(tilePosition);
+
+                    if(vis) {
+                        mixLight(vis, lightColor, l.point, l.radius);
+                    }
+
+                    lightVisible = lightVisible || vis;
+                }
+
+                mixLight(dungeon.isVisible(tilePosition), lightColor, visiblePosition, visibleRadius);
+                
+                tilemap.SetColor(tilePosition, tileColor);
             }
         }
     }
