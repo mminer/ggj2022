@@ -31,13 +31,19 @@ class PlayerMovement : MonoBehaviour
 
     void Move(Vector3Int delta)
     {
+        var mapService = Services.Get<MapService>();
         var targetTilePosition = Vector3Int.FloorToInt(transform.position) + delta;
 
-        if (!Services.Get<MapService>().CanMoveToTile(targetTilePosition))
+        if (!mapService.CanMoveToTile(targetTilePosition))
         {
             return;
         }
 
         transform.position = targetTilePosition;
+
+        if (targetTilePosition == mapService.exitPosition)
+        {
+            Services.Get<GameService>().EndGame(true);
+        }
     }
 }

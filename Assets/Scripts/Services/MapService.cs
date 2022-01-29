@@ -64,9 +64,9 @@ class MapService : Services.Service
     [SerializeField] Tile groundTile;
     [SerializeField] Tile notGroundTile;
 
+    public Vector3Int exitPosition { get; private set; }
     public Vector3Int playerSpawnPosition { get; private set; }
 
-    Vector3Int exitPosition;
     Map map;
     RandomNumberGenerator rng;
 
