@@ -22,6 +22,7 @@ class UIService : Services.Service
         rootVisualElement.Q<Button>("title-buttons-create").clicked += () =>
         {
             Services.Get<GameService>().StartGame();
+            rootVisualElement.Q<Label>("game-code").text = "Code: FIXME";
             ShowScreen("game");
         };
 
