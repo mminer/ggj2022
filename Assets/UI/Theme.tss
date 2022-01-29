@@ -22,7 +22,14 @@
 .title {
     height: 100px;
     margin-bottom: 15px;
-    font-size: 32px;
+    font-size: 60px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.subtitle {
+    font-size: 30px;
+    margin-bottom: 15px;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
 }
@@ -56,7 +63,7 @@
 }
 
 /* Join Game Screen */
-#join-title, #join-inputs-instructions{
+#join-title, #join-inputs-instructions {
     color: white;
 }
 
@@ -94,16 +101,11 @@
 
 /* Results Screen */
 #results-title {
-    font-size: 60px;
     color: white;
 }
 
 #results-message {
-    font-size: 30px;
     color: red;
-    margin-bottom: 15px;
-    -unity-font-style: bold;
-    -unity-text-align: middle-center;
 }
 
 /* Instructions */
@@ -117,4 +119,46 @@
     white-space: normal;
     -unity-text-align: middle-center;
     font-size: 18px;
+}
+
+/* Glyphs */
+#glyphs-warning {
+    color: red;
+}
+
+#glyphs-buttons {
+    flex-direction: row;
+}
+
+#glyphs-buttons-cancel {
+    width: 100px;
+}
+
+#glyphs-buttons-submit:hover {
+    background-color: red;
+}
+
+#glyphs-combo {
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+.glyph {
+    margin: 15px 0;
+    width: 100px;
+    justify-content: center;
+    align-items: center;
+}
+
+.glyph Image {
+    margin: 15px 0;
+}
+
+#glyphs-combo .up, #glyphs-combo .down {
+    width: 100%;
+    height: 15px;
+}
+
+#glyphs-combo TextField {
+    display: none;
 }

@@ -18,5 +18,6 @@ public enum ItemType
     Monster,
     Pit,
     Weapon,
+    Passcode,
     None,
 }

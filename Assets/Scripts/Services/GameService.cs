@@ -16,6 +16,11 @@ public class GameService : Services.Service
 
     GameObject player;
 
+    void Awake()
+    {
+        Services.Get<UIService>().OnSubmitGlyphs += OnSubmitGlyphs;
+    }
+
     public void StartGame(string code = null)
     {
         // If we don't reset the random number generator, the game uses the seed from the previous run.
@@ -56,5 +61,11 @@ public class GameService : Services.Service
     {
         OnGameEnded?.Invoke(endCondition);
         Destroy(player);
+    }
+
+    private void OnSubmitGlyphs(int[] combo)
+    {
+        Debug.Log("TODO: check if combo is expected");
+        EndGame(ItemType.Passcode);
     }
 }

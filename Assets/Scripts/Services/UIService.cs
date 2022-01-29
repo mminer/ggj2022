@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class UIService : Services.Service
 {
     [SerializeField] string defaultScreenName;
+
+    public delegate void OnSubmitGlyphsHandler(int[] combo);
+    public event OnSubmitGlyphsHandler OnSubmitGlyphs;
 
     List<VisualElement> screens;
 
@@ -35,6 +40,7 @@ public class UIService : Services.Service
             var causeOfDeath = endCondition switch
             {
                 _ when endCondition == ItemType.Pit => "Fell into a pit",
+                _ when endCondition == ItemType.Passcode => "Insulted the Gods with a bad glyph combination",
                 _ when endCondition == ItemType.Exit => "",
                 _ => throw new ArgumentOutOfRangeException(),
             };
@@ -60,6 +66,17 @@ public class UIService : Services.Service
             Services.Get<GameService>().StartGame();
             ShowScreen("game");
         };
+
+        // Glyph events
+        rootVisualElement.Q<Button>("glyphs-buttons-cancel").clicked += () => { ShowScreen("game"); };
+        rootVisualElement.Q<Button>("glyphs-buttons-submit").clicked += () =>
+        {
+            var glyphs = rootVisualElement.Query(className: "glyph").ToList();
+            var combo = glyphs.Select(glyph => Int32.Parse(glyph.Q<TextField>().value)).ToArray();
+            Debug.Log($"Submit combo: {combo[0]}-{combo[1]}-{combo[2]}");
+            OnSubmitGlyphs?.Invoke(combo);
+        };
+        GenerateGlyphs(rootVisualElement);
 
         // Join game events
         var codeError = rootVisualElement.Q<Label>("join-inputs-error");
@@ -92,6 +109,59 @@ public class UIService : Services.Service
         {
             screen.style.display = screen.name == screenName ? DisplayStyle.Flex : DisplayStyle.None;
         }
+    }
+
+    private void GenerateGlyphs(VisualElement rootVisualElement)
+    {
+        var sprites = Resources.LoadAll<Sprite>("Textures/runeGrey_tileOutline_sheet");
+        var glyphs = rootVisualElement.Query(className: "glyph").ToList();
+        glyphs.ForEach((glyph) => GenerateGlyph(glyph, sprites));
+    }
+
+    private void GenerateGlyph(VisualElement glyph, Sprite[] sprites)
+    {
+        var input = glyph.Q<TextField>();
+        var image = glyph.Q<Image>();
+        var index = Random.Range(1, sprites.Length);
+
+        glyph.Q<Button>(className: "up").clicked += () =>
+        {
+            if (index + 1 >= sprites.Length)
+            {
+                // Skip the blank glyph at index 0
+                index = 1;
+            }
+            else
+            {
+                index++;
+            }
+
+            UpdateGlyph(image, input, index, sprites);
+        };
+
+        glyph.Q<Button>(className: "down").clicked += () =>
+        {
+            // Skip the blank glyph at index 0
+            if (index - 1 <= 0)
+            {
+                index = sprites.Length - 1;
+            }
+            else
+            {
+                index--;
+            }
+
+            UpdateGlyph(image, input, index, sprites);
+        };
+
+        UpdateGlyph(image, input, index, sprites);
+    }
+
+    private static void UpdateGlyph(Image image, TextField input, int index, Sprite[] sprites)
+    {
+        // image.image = sprites[index].texture;
+        image.sprite = sprites[index];
+        input.value = index.ToString();
     }
 
     private static bool IsValidCode(string code)

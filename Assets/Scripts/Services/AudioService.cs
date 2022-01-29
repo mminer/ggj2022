@@ -6,12 +6,12 @@ public class AudioService : Services.Service
     AudioSource playerAudioSource;
 
 
-    [Header("Footsteps")]
+    [Header("== Footsteps ==")]
     [SerializeField] private float footstepVolume = 0.1f;
     [SerializeField] private AudioClip[] footsteps;
     private int footstepIndex;
 
-    [Header("Traps")]
+    [Header("== Traps ==")]
     [SerializeField] private AudioClip pitFall;
 
     void Awake()
