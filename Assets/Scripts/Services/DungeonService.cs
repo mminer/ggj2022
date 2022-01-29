@@ -16,16 +16,16 @@ public class DungeonService : Services.Service
 
     [Header("Items")]
     [SerializeField] int pitCount = 5;
-    
+
     [Header("Lights")]
     [SerializeField] int lightCount = 5;
     [SerializeField] private Color lightColor = Color.white;
 
     [Header("Tiles")]
-    [SerializeField] Tile exitTile;
-    [SerializeField] Tile groundTile;
-    [SerializeField] Tile pitTile;
-    [SerializeField] Tile wallTile;
+    [SerializeField] TileBase exitTile;
+    [SerializeField] TileBase groundTile;
+    [SerializeField] TileBase pitTile;
+    [SerializeField] TileBase wallTile;
 
     [SerializeField] private int visibleRadius = 3;
 
@@ -49,7 +49,7 @@ public class DungeonService : Services.Service
         return playerAssignment == PlayerType.Player1 ? dungeon.glyphs[0] : dungeon.glyphs[1];
     }
 
-    Tile GetTile(Vector3Int tilePosition, PlayerType playerAssignment)
+    TileBase GetTile(Vector3Int tilePosition, PlayerType playerAssignment)
     {
         var (isWalkable, item) = dungeon[tilePosition];
 
@@ -82,13 +82,12 @@ public class DungeonService : Services.Service
             {
                 var tilePosition = new Vector3Int(x, y);
                 var tile = GetTile(tilePosition, playerAssignment);
-                
                 tilemap.SetTile(tilePosition, tile);
                 tilemap.SetTileFlags(tilePosition, TileFlags.None); // needed to change the color of a tile...
 
                 var tileColor = Color.black;
 
-                void mixLight (bool isVisible, Color color, Vector3Int fromPoint, float radius) 
+                void mixLight (bool isVisible, Color color, Vector3Int fromPoint, float radius)
                 {
                     float distanceFromPoint = Vector3Int.Distance(tilePosition, fromPoint);
 
@@ -100,12 +99,12 @@ public class DungeonService : Services.Service
                     // add the brightness of the lit tiles (an unlit black tile will have a brightness of 0)
                     var brightness = (isVisible ? (1.0f - (distanceFromPoint - 1) / radius) : 0);
                     tileColor = Color.HSVToRGB(hue, saturation, brightness + tileBrightness);
-                    
+
                 };
 
                 bool lightVisible = false;
-                
-                foreach(Dungeon.Light l in dungeon.lights) 
+
+                foreach(Dungeon.Light l in dungeon.lights)
                 {
                     var vis = l.isVisible(tilePosition);
 
@@ -117,7 +116,7 @@ public class DungeonService : Services.Service
                 }
 
                 mixLight(dungeon.isVisible(tilePosition), lightColor, visiblePosition, visibleRadius);
-                
+
                 tilemap.SetColor(tilePosition, tileColor);
             }
         }
