@@ -7,7 +7,10 @@ class GameService : Services.Service
 
     public void StartGame(string code = null)
     {
-        Services.Get<MapService>().GenerateMap();
-        var player = Instantiate(playerPrefab);
+        var mapService = Services.Get<MapService>();
+        mapService.GenerateMap();
+
+        // Spawn player.
+        Instantiate(playerPrefab, mapService.playerSpawnPoint, Quaternion.identity);
     }
 }

@@ -11,8 +11,11 @@ class MapService : Services.Service
     [SerializeField] int roomMinSize = 3;
 
     [Header("Tiles")]
+    [SerializeField] Tile exitTile;
     [SerializeField] Tile groundTile;
     [SerializeField] Tile notGroundTile;
+
+    public Vector3Int playerSpawnPoint { get; private set; }
 
     Map map;
 
@@ -41,5 +44,36 @@ class MapService : Services.Service
                 tilemap.SetTile(tilePosition, cell.IsWalkable ? groundTile : notGroundTile);
             }
         }
+
+        // Four corners.
+        var bottomLeft = new Vector3Int(-map.Height / 2 + 1, -map.Width / 2 + 1);
+        var bottomRight = new Vector3Int(map.Height / 2 - 2, -map.Width / 2 + 1);
+        var topLeft = new Vector3Int(-map.Height / 2 + 1, map.Width / 2 - 2);
+        var topRight = new Vector3Int(map.Height / 2 - 2, map.Width / 2 - 2);
+
+        var playerSpawnPointPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
+        playerSpawnPoint = playerSpawnPointPossibilities[Random.Range(0, playerSpawnPointPossibilities.Length)];
+
+        Vector3Int exitPosition;
+
+        // Choose the corner opposite the player spawn point for the exit.
+        if (playerSpawnPoint == bottomLeft)
+        {
+            exitPosition = topRight;
+        }
+        else if (playerSpawnPoint == bottomRight)
+        {
+            exitPosition = topLeft;
+        }
+        else if (playerSpawnPoint == bottomRight)
+        {
+            exitPosition = bottomLeft;
+        }
+        else
+        {
+            exitPosition = bottomLeft;
+        }
+
+        tilemap.SetTile(exitPosition, exitTile);
     }
 }
