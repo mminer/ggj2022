@@ -17,6 +17,9 @@ public class AudioService : Services.Service
     [Header("== UI Buttons ==")]
     [SerializeField] private AudioClip cycleGlyph;
 
+    [Header("== Jingles ==")]
+    [SerializeField] private AudioClip winJingle;
+
     void Awake()
     {
         playerAudioSource = GetComponent<AudioSource>();
@@ -32,6 +35,11 @@ public class AudioService : Services.Service
     public void PlaySoundEffect(AudioClip clip, float volume = 1)
     {
         playerAudioSource.PlayOneShot(clip, volume);
+    }
+
+    public void PlayWinJingle()
+    {
+        PlaySoundEffect(winJingle);
     }
 
     public void PlayFootstep()

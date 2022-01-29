@@ -69,6 +69,12 @@ public class GameService : Services.Service
     public void EndGame(EndCondition endCondition)
     {
         OnGameEnded?.Invoke(endCondition);
+
+        if (endCondition == EndCondition.Won)
+        {
+            Services.Get<AudioService>().PlayWinJingle();
+        }
+
         Destroy(player);
     }
 
