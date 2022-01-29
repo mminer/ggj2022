@@ -344,6 +344,8 @@ MonoBehaviour:
   maxRooms: 30
   roomMaxSize: 10
   roomMinSize: 3
+  width: 32
+  height: 32
   exitTile: {fileID: 11400000, guid: 90ecafb30a63942a79581c8997b24208, type: 2}
   groundTile: {fileID: 11400000, guid: 8c5249fdbea9f419cbbc2adf2dbfff87, type: 2}
   notGroundTile: {fileID: 11400000, guid: 86ab93059e9f54cf9bd1f7f25503162b, type: 2}
