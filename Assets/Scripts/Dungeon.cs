@@ -211,7 +211,8 @@ public class Dungeon
         while (placedPits < pitCount)
         {
             var position = GetRandomWalkablePositionThatPlayerCanCircumvent();
-            SetItem(ItemType.Pit, position, PlayerType.Player2);
+            var visibleToPlayer1 = rng.NextBool();
+            SetItem(ItemType.Pit, position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
             placedPits++;
         }
     }
