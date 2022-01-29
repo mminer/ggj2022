@@ -8,16 +8,13 @@ class GameService : Services.Service
 
     bool isPlayer1 = true;
 
-    void Awake()
+    public void StartGame(string code = null)
     {
         // If we don't reset the random number generator, the game uses the seed from the previous run.
         // The random number generator state persists between game sessions.
         // We don't want this to happen, so randomize it now.
         Random.InitState((int)DateTime.Now.Ticks);
-    }
 
-    public void StartGame(string code = null)
-    {
         if (code != null)
         {
             isPlayer1 = false;
