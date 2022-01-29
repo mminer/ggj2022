@@ -50,7 +50,7 @@ class PlayerMovement : MonoBehaviour
             if(currentHoldWait > 0) { return; } // WAIT
             currentHoldWait = holdWait; // reset the waiting time when there's a successful movement.
             
-            var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.FloorToInt(direction);
+            var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.RoundToInt(direction);
             var dungeonService = Services.Get<DungeonService>();
 
             if (!dungeonService.CanMoveToTile(targetTilePosition)) { return; }
