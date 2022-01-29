@@ -18,6 +18,7 @@ class UIService : Services.Service
 
         // General button events
         rootVisualElement.Q<Button>("join-back").clicked += () => { ShowScreen("title"); };
+        rootVisualElement.Q<Button>("game-quit").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("title-buttons-join").clicked += () => { ShowScreen("join"); };
         rootVisualElement.Q<Button>("title-buttons-create").clicked += () =>
         {
@@ -62,6 +63,7 @@ class UIService : Services.Service
     {
         var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
         rootVisualElement.Q<Label>("game-code").text = "Code: " + code;
+        Debug.Log("Game Code: " + code);
     }
 
     private static bool IsValidCode(string code)

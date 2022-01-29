@@ -67,6 +67,21 @@
 }
 
 /* Game (HUD) Screen */
-#game Label {
-    color: blue;
+
+#game {
+    height: 50px;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 150);
+}
+
+#game-quit {
+    width: 100px;
+}
+
+#game-code {
+    color: yellow;
+    font-size: 24px;
+    -unity-font-style: bold;
 }
