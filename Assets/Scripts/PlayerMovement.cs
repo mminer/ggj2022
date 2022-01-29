@@ -31,6 +31,8 @@ class PlayerMovement : MonoBehaviour
             return;
         }
 
+        Services.Get<AudioService>().PlayFootstep();
+
         transform.position = targetTilePosition;
 
         if (targetTilePosition == mapService.exitPosition)
