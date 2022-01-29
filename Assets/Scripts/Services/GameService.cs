@@ -15,7 +15,8 @@ class GameService : Services.Service
         }
 
         var mapService = Services.Get<MapService>();
-        mapService.GenerateMap();
+        // TODO: get this value from the UI
+        mapService.GenerateMap("abcd");
 
         // Spawn player.
         Instantiate(playerPrefab, mapService.playerSpawnPoint, Quaternion.identity);

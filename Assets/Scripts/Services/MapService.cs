@@ -1,10 +1,52 @@
 using RogueSharp;
 using RogueSharp.MapCreation;
+using RogueSharp.Random;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 class MapService : Services.Service
 {
+    /// <summary>
+    /// Wraps Unity's random number generator for use with RogueSharp.
+    /// </summary>
+    class RandomNumberGenerator : IRandom
+    {
+        int seed;
+        long timesUsed;
+
+        public RandomNumberGenerator(string gameCode)
+        {
+            seed = GameCodeUtility.GetSeedFromGameCode(gameCode);
+            Random.InitState(seed);
+        }
+
+        public int Next(int maxValue)
+        {
+            return Random.Range(0, maxValue);
+        }
+
+        public int Next(int minValue, int maxValue)
+        {
+            return Random.Range(minValue, maxValue);
+        }
+
+        public RandomState Save()
+        {
+            return new RandomState
+            {
+                NumberGenerated = timesUsed,
+                Seed = new[] { seed },
+            };
+        }
+
+        public void Restore(RandomState state)
+        {
+            seed = state.Seed[0];
+            timesUsed = state.NumberGenerated;
+            Random.InitState(seed);
+        }
+    }
+
     [SerializeField] Tilemap tilemap;
     [SerializeField] int maxRooms = 30;
     [SerializeField] int roomMaxSize = 10;
@@ -25,10 +67,18 @@ class MapService : Services.Service
         return true;
     }
 
-    public void GenerateMap()
+    public void GenerateMap(string gameCode)
     {
-        var mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(32, 32, maxRooms, roomMaxSize, roomMinSize);
-        //var mapCreationStrategy = new CaveMapCreationStrategy<Map>(32, 32, 50, 4, 3);
+        var randomNumberGenerator = new RandomNumberGenerator(gameCode);
+
+        var mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(
+            32,
+            32,
+            maxRooms,
+            roomMaxSize,
+            roomMinSize,
+            randomNumberGenerator);
+
         map = Map.Create(mapCreationStrategy);
         Debug.Log($"Generated map: \n{map}");
 
@@ -52,7 +102,7 @@ class MapService : Services.Service
         var topRight = new Vector3Int(map.Height / 2 - 2, map.Width / 2 - 2);
 
         var playerSpawnPointPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
-        playerSpawnPoint = playerSpawnPointPossibilities[Random.Range(0, playerSpawnPointPossibilities.Length)];
+        playerSpawnPoint = playerSpawnPointPossibilities[randomNumberGenerator.Next(playerSpawnPointPossibilities.Length)];
 
         Vector3Int exitPosition;
 
