@@ -61,7 +61,7 @@ public class GameService : Services.Service
             Destroy(player);
         }
 
-        player = Instantiate(playerPrefab, dungeonService.dungeon.playerSpawnPosition, Quaternion.identity);
+        player = Instantiate(playerPrefab, dungeonService.dungeon.entrancePosition, Quaternion.identity);
 
         OnGameStarted?.Invoke(code);
     }

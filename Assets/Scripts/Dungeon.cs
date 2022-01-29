@@ -10,14 +10,15 @@ using UnityEngine;
 /// </summary>
 public class Dungeon
 {
-    public readonly Vector3Int playerSpawnPosition;
+    public readonly Vector3Int entrancePosition;
+    public readonly Vector3Int exitPosition;
     public readonly int[] glyphs;
 
+    readonly List<Cell> emptyCells;
     readonly Item?[,] items;
     readonly Map map;
     readonly FieldOfView fov;
     readonly RandomNumberGenerator rng;
-    readonly Cell[] walkableCells;
 
     public (bool isWalkable, Item? item) this[Vector3Int position] => (
         map[position.x, position.y].IsWalkable,
@@ -48,6 +49,7 @@ public class Dungeon
             rng);
 
         map = Map.Create(mapCreationStrategy);
+        emptyCells = map.GetAllCells().Where(cell => cell.IsWalkable).ToList();
 
         // Four corners inside the walls.
         var bottomLeft = new Vector3Int(1, 1);
@@ -68,31 +70,29 @@ public class Dungeon
             };
         }
 
-        // Player spawn position:
+        // Entrance position:
 
-        var playerSpawnPositionPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
-        playerSpawnPosition = playerSpawnPositionPossibilities[rng.Next(playerSpawnPositionPossibilities.Length)];
-        CarvePathToEmptyTile(playerSpawnPosition, GetPathCarveDirection(playerSpawnPosition));
+        var entrancePositionPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
+        entrancePosition = entrancePositionPossibilities[rng.Next(entrancePositionPossibilities.Length)];
+        CarvePathToEmptyTile(entrancePosition, GetPathCarveDirection(entrancePosition));
+        RemoveEmptyCell(entrancePosition);
 
         // Exit position:
 
-        // Choose the corner opposite the player spawn position for the exit.
-        var exitPosition = playerSpawnPosition switch
+        // Choose the corner opposite the entrance for the exit.
+        exitPosition = entrancePosition switch
         {
-            _ when playerSpawnPosition == bottomLeft => topRight,
-            _ when playerSpawnPosition == bottomRight => topLeft,
-            _ when playerSpawnPosition == topLeft => bottomRight,
-            _ when playerSpawnPosition == topRight => bottomLeft,
+            _ when entrancePosition == bottomLeft => topRight,
+            _ when entrancePosition == bottomRight => topLeft,
+            _ when entrancePosition == topLeft => bottomRight,
+            _ when entrancePosition == topRight => bottomLeft,
             _ => throw new ArgumentOutOfRangeException(),
         };
 
-        items[exitPosition.x, exitPosition.y] = new Item(ItemType.Exit, PlayerType.Both);
         CarvePathToEmptyTile(exitPosition, GetPathCarveDirection(exitPosition));
+        SetItem(ItemType.Exit, exitPosition, PlayerType.Both);
 
         // Item positions:
-
-        // Cache for later to speed up finding positions to place items.
-        walkableCells = map.GetAllCells().Where(cell => cell.IsWalkable).ToArray();
 
         foreach (var kvp in itemCounts)
         {
@@ -137,8 +137,10 @@ public class Dungeon
 
         while (!map[position.x, position.y].IsWalkable)
         {
-            map[position.x, position.y].IsWalkable = true;
-            map[position.x, position.y].IsTransparent = true;
+            var cell = map[position.x, position.y];
+            cell.IsTransparent = true;
+            cell.IsWalkable = true;
+            emptyCells.Add(cell);
 
             if (iteration % 2 == 0)
             {
@@ -157,8 +159,33 @@ public class Dungeon
     {
         while (true)
         {
-            var cell = walkableCells[rng.Next(walkableCells.Length)];
+            var cell = emptyCells[rng.Next(emptyCells.Count)];
             return new Vector3Int(cell.X, cell.Y);
+        }
+    }
+
+    /// <summary>
+    /// Finds an empty spot on the map that the player can walk around to reach the exit.
+    /// </summary>
+    Vector3Int GetRandomWalkablePositionThatPlayerCanCircumvent()
+    {
+        while (true)
+        {
+            using var temporaryMap = new PathfindingMap(map, items);
+            var position = GetRandomWalkablePosition();
+            map[position.x, position.y].IsWalkable = false;
+
+            var pathFinder = new PathFinder(map);
+            var entranceCell = map[entrancePosition.x, entrancePosition.y];
+            var exitCell = map[exitPosition.x, exitPosition.y];
+            var path = pathFinder.TryFindShortestPath(entranceCell, exitCell);
+
+            if (path == null)
+            {
+                continue;
+            }
+
+            return position;
         }
     }
 
@@ -183,25 +210,8 @@ public class Dungeon
 
         while (placedPits < pitCount)
         {
-            var position = GetRandomWalkablePosition();
-
-            // Don't place a pit where another item has been placed.
-            if (items[position.x, position.y].HasValue)
-            {
-                continue;
-            }
-
-            // Ensure it's possible to walk around a pit.
-            var isPassable = map
-                .GetAdjacentCells(position.x, position.y, true)
-                .All(cell => cell.IsWalkable && !items[cell.X, cell.Y].HasValue);
-
-            if (!isPassable)
-            {
-                continue;
-            }
-
-            items[position.x, position.y] = new Item(ItemType.Pit, PlayerType.Player2);
+            var position = GetRandomWalkablePositionThatPlayerCanCircumvent();
+            SetItem(ItemType.Pit, position, PlayerType.Player2);
             placedPits++;
         }
     }
@@ -211,13 +221,25 @@ public class Dungeon
         throw new NotImplementedException();
     }
 
-    public void RegenerateVisible(Vector3Int at, int radius) 
+    public void RegenerateVisible(Vector3Int at, int radius)
     {
         fov?.ComputeFov(at.x, at.y, radius, true).ToArray();
     }
 
-    public bool isVisible(Vector3Int at) 
+    public bool isVisible(Vector3Int at)
     {
         return fov.IsInFov(at.x, at.y);
+    }
+
+    void RemoveEmptyCell(Vector3Int position)
+    {
+        var cell = map[position.x, position.y];
+        emptyCells.Remove(cell);
+    }
+
+    void SetItem(ItemType itemType, Vector3Int position, PlayerType playerVisibility)
+    {
+        items[position.x, position.y] = new Item(itemType, playerVisibility);
+        RemoveEmptyCell(position);
     }
 }

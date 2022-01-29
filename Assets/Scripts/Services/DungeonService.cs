@@ -38,7 +38,7 @@ public class DungeonService : Services.Service
         dungeon = new Dungeon(gameCode, width, height, maxRooms, roomMaxSize, roomMinSize, itemCounts);
         Debug.Log($"Generated dungeon: \n{dungeon}");
 
-        RegenerateVisible(dungeon.playerSpawnPosition);
+        RegenerateVisible(dungeon.entrancePosition);
     }
 
     public int GetGlyphByPlayer(PlayerType playerAssignment)
