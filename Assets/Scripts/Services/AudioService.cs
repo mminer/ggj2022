@@ -22,6 +22,13 @@ public class AudioService : Services.Service
         playerAudioSource = GetComponent<AudioSource>();
     }
 
+    public bool ToggleMute()
+    {
+        var muted = AudioListener.volume == 0;
+        AudioListener.volume = muted ? 1f : 0f;
+        return !muted;
+    }
+
     public void PlaySoundEffect(AudioClip clip, float volume = 1)
     {
         playerAudioSource.PlayOneShot(clip, volume);
@@ -29,33 +36,23 @@ public class AudioService : Services.Service
 
     public void PlayFootstep()
     {
-        playerAudioSource.clip = footsteps[footstepIndex];
-        playerAudioSource.volume = footstepVolume;
-        playerAudioSource.Play();
+        PlaySoundEffect(footsteps[footstepIndex], footstepVolume);
         footstepIndex = footstepIndex + 1 >= footsteps.Length ? 0 : footstepIndex + 1;
     }
 
     public void PlayTrap(ItemType trap)
     {
-        playerAudioSource.volume = 1;
-
-        switch (trap)
+        var trapAudioClip = trap switch
         {
-            case ItemType.Pit:
-                playerAudioSource.clip = pitFall;
-                break;
-            default:
-                Debug.LogError($"Unimplemented trap audio: {trap}");
-                throw new ArgumentOutOfRangeException();
+            _ when trap == ItemType.Pit => pitFall,
+            _ => throw new ArgumentOutOfRangeException(),
         };
 
-        playerAudioSource.Play();
+        PlaySoundEffect(trapAudioClip);
     }
 
     public void PlayCycleGlyph()
     {
-        playerAudioSource.clip = cycleGlyph;
-        playerAudioSource.volume = 0.1f;
-        playerAudioSource.Play();
+        PlaySoundEffect(cycleGlyph, 0.1f);
     }
 }

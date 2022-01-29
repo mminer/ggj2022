@@ -56,6 +56,12 @@ public class UIService : Services.Service
             Services.Get<GameService>().EndGame(EndCondition.Quit);
             ShowScreen("title");
         };
+        rootVisualElement.Q<Button>("game-mute").clicked += () =>
+        {
+            var muted = Services.Get<AudioService>().ToggleMute();
+            var state = muted ? "OFF" : "ON";
+            rootVisualElement.Q<Button>("game-mute").text = $"SFX: {state}";
+        };
         rootVisualElement.Q<Button>("results-quit").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("title-buttons-join").clicked += () => { ShowScreen("join"); };
         rootVisualElement.Q<Button>("title-buttons-instructions").clicked += () => { ShowScreen("instructions"); };
