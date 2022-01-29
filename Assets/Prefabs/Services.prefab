@@ -365,3 +365,5 @@ MonoBehaviour:
   groundTile: {fileID: 11400000, guid: 8c5249fdbea9f419cbbc2adf2dbfff87, type: 2}
   pitTile: {fileID: 11400000, guid: 388a35475f2b041bb91fdc1f652a4b8e, type: 2}
   wallTile: {fileID: 11400000, guid: 86ab93059e9f54cf9bd1f7f25503162b, type: 2}
+  visibleRadius: 5
+  visibleColor: {r: 1, g: 1, b: 1, a: 1}
