@@ -91,6 +91,7 @@
 }
 
 /* Results Screen */
-#results {
-
+#results-title {
+    font-size: 60px;
+    color: white;
 }
