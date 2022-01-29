@@ -1,9 +1,22 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:VisualElement class="screen" name="game">
-        <ui:Label text="Game" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="game" class="screen">
+        <ui:Label name="game-code" text="Join with code XXXX" />
     </ui:VisualElement>
-
-    <ui:VisualElement class="screen" name="title">
-        <ui:Label text="GGJ 2022!" />
+    <ui:VisualElement name="title" class="screen full-screen">
+        <ui:Label name="title-label" class="title" text="GGJ 2022!" />
+        <ui:VisualElement name="title-buttons">
+            <ui:Button name="title-buttons-create" class="button" text="Create Game" />
+            <ui:Button name="title-buttons-join" class="button" text="Join Game" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="join" class="screen full-screen">
+        <ui:Button name="join-back" class="button" text="...Back" />
+        <ui:Label name="join-title" class="title" text="Join Existing Game" />
+        <ui:VisualElement name="join-inputs">
+            <ui:Label name="join-inputs-instructions" text="Enter 4-digit game code" />
+            <ui:TextField name="join-inputs-code" max-length="4" />
+            <ui:Button name="join-inputs-button" class="button" text="Join with Code" />
+            <ui:Label name="join-inputs-error" text="" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

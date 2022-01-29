@@ -3,12 +3,70 @@
 .screen {
     /* UIService.ShowScreen handles displaying screens. */
     display: none;
+    height: 100%;
+    width: 100%;
 }
 
+.full-screen {
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    height: 100px;
+    margin-bottom: 15px;
+    font-size: 32px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.button {
+    background-color: black;
+    border-color: white;
+    color: white;
+    -unity-font-style: bold;
+}
+
+.button:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Title Screen */
+#title-label {
+    color: red;
+}
+
+#title-buttons {
+    justify-content: space-around;
+    align-items: center;
+}
+
+#title-buttons Button {
+    width: 200px;
+    margin: 15px 0;
+}
+
+/* Join Game Screen */
+#join-title, #join-inputs-instructions{
+    color: white;
+}
+
+#join-inputs-code {
+    width: 200px;
+}
+
+#join-inputs Button {
+    width: 200px;
+    margin: 15px 0;
+}
+
+#join-inputs-error {
+    color: red;
+}
+
+/* Game (HUD) Screen */
 #game Label {
     color: blue;
-}
-
-#title Label {
-    color: red;
 }
