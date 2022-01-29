@@ -210,3 +210,4 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
+  holdWait: 0.2
