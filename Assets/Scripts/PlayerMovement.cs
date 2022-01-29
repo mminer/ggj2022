@@ -53,17 +53,15 @@ class PlayerMovement : MonoBehaviour
             var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.FloorToInt(direction);
             var dungeonService = Services.Get<DungeonService>();
 
-            if (!dungeonService.CanMoveToTile(targetTilePosition))
+            if (!dungeonService.CanMoveToTile(targetTilePosition)) { return; }
+
+            Services.Get<AudioService>().PlayFootstep();
+
+            transform.position = targetTilePosition;
+
+            if (targetTilePosition == dungeonService.dungeon.exitPosition)
             {
-
-                Services.Get<AudioService>().PlayFootstep();
-
-                transform.position = targetTilePosition;
-
-                if (targetTilePosition == dungeonService.dungeon.exitPosition)
-                {
-                    Services.Get<GameService>().EndGame(true);
-                }
+                Services.Get<GameService>().EndGame(true);
             }
         }
     }
