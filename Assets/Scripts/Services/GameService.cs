@@ -32,11 +32,11 @@ class GameService : Services.Service
             Debug.Log($"Generated code: {code}");
         }
 
-        var mapService = Services.Get<MapService>();
-        mapService.GenerateMap(code);
+        var dungeonService = Services.Get<DungeonService>();
+        dungeonService.GenerateDungeon(code);
 
         // Spawn player.
-        player = Instantiate(playerPrefab, mapService.playerSpawnPosition, Quaternion.identity);
+        player = Instantiate(playerPrefab, dungeonService.dungeon.playerSpawnPosition, Quaternion.identity);
 
         OnGameStarted?.Invoke(code);
     }

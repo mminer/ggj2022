@@ -24,9 +24,9 @@ class PlayerMovement : MonoBehaviour
     {
         var direction = context.ReadValue<Vector2>();
         var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.FloorToInt(direction);
-        var mapService = Services.Get<MapService>();
+        var dungeonService = Services.Get<DungeonService>();
 
-        if (!mapService.CanMoveToTile(targetTilePosition))
+        if (!dungeonService.CanMoveToTile(targetTilePosition))
         {
             return;
         }
@@ -35,7 +35,7 @@ class PlayerMovement : MonoBehaviour
 
         transform.position = targetTilePosition;
 
-        if (targetTilePosition == mapService.exitPosition)
+        if (targetTilePosition == dungeonService.dungeon.exitPosition)
         {
             Services.Get<GameService>().EndGame(true);
         }
