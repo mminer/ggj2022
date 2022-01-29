@@ -13,6 +13,7 @@ class GameService : Services.Service
     public event OnGameEndedHandler OnGameEnded;
 
     bool isPlayer1 = true;
+    GameObject player;
 
     public void StartGame(string code = null)
     {
@@ -35,19 +36,14 @@ class GameService : Services.Service
         mapService.GenerateMap(code);
 
         // Spawn player.
-        Instantiate(playerPrefab, mapService.playerSpawnPoint, Quaternion.identity);
+        player = Instantiate(playerPrefab, mapService.playerSpawnPosition, Quaternion.identity);
 
-        if (OnGameStarted != null)
-        {
-            OnGameStarted(code);
-        }
+        OnGameStarted?.Invoke(code);
     }
 
     public void EndGame(bool isWinner)
     {
-        if (OnGameEnded != null)
-        {
-            OnGameEnded(isWinner);
-        }
+        OnGameEnded?.Invoke(isWinner);
+        Destroy(player);
     }
 }
