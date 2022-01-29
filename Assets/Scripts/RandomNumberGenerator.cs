@@ -25,6 +25,11 @@ public class RandomNumberGenerator : IRandom
         return Random.Range(minValue, maxValue);
     }
 
+    public bool NextBool()
+    {
+        return Random.Range(0, 2) == 1;
+    }
+
     public void Restore(RandomState state)
     {
         seed = state.Seed[0];
