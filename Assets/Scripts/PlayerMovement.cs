@@ -46,26 +46,26 @@ class PlayerMovement : MonoBehaviour
 
     private void MoveLogic() 
     {
-        if(direction != Vector2.zero)
-        {
+        if(direction != Vector2.zero) {
             if(currentHoldWait > 0) { return; } // WAIT
             currentHoldWait = holdWait; // reset the waiting time when there's a successful movement.
             
             var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.FloorToInt(direction);
-            var mapService = Services.Get<MapService>();
+            var dungeonService = Services.Get<DungeonService>();
 
-            if (!mapService.CanMoveToTile(targetTilePosition))
+            if (!dungeonService.CanMoveToTile(targetTilePosition))
             {
-                return;
-            }
 
-            transform.position = targetTilePosition;
+                Services.Get<AudioService>().PlayFootstep();
 
-            if (targetTilePosition == mapService.exitPosition)
-            {
-                Services.Get<GameService>().EndGame(true);
+                transform.position = targetTilePosition;
+
+                if (targetTilePosition == dungeonService.dungeon.exitPosition)
+                {
+                    Services.Get<GameService>().EndGame(true);
+                }
             }
-        } 
+        }
     }
 
 }
