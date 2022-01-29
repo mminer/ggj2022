@@ -9,7 +9,7 @@ public class GameService : Services.Service
     public delegate void OnGameStartedHandler(string gameCode);
     public event OnGameStartedHandler OnGameStarted;
 
-    public delegate void OnGameEndedHandler(bool isWinner);
+    public delegate void OnGameEndedHandler(ItemType endCondition);
     public event OnGameEndedHandler OnGameEnded;
 
     public Player playerAssignment { get; private set; } = Player.None;
@@ -52,9 +52,9 @@ public class GameService : Services.Service
         OnGameStarted?.Invoke(code);
     }
 
-    public void EndGame(bool isWinner)
+    public void EndGame(ItemType endCondition)
     {
-        OnGameEnded?.Invoke(isWinner);
+        OnGameEnded?.Invoke(endCondition);
         Destroy(player);
     }
 }

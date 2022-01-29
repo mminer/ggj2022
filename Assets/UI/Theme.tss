@@ -98,6 +98,14 @@
     color: white;
 }
 
+#results-message {
+    font-size: 30px;
+    color: red;
+    margin-bottom: 15px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
 /* Instructions */
 #instructions-wrapper {
     width: 600px;

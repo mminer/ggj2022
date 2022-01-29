@@ -30,6 +30,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="results" class="screen full-screen">
         <ui:Label name="results-title" class="title" text="placeholder title" />
+        <ui:Label name="results-message" text="placeholder death message" />
         <ui:Button name="results-quit" class="button" text="Quit" />
     </ui:VisualElement>
 </ui:UXML>

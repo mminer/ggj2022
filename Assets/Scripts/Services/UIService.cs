@@ -24,9 +24,23 @@ public class UIService : Services.Service
             Debug.Log("Game Code: " + code);
         };
 
-        gameService.OnGameEnded += (isWinner) =>
+        gameService.OnGameEnded += (endCondition) =>
         {
-            var title = isWinner ? "Winner!" : "Womp, womp, you lose!";
+            // Player quit the game
+            if (endCondition == ItemType.None)
+            {
+                return;
+            }
+            // Choose the corner opposite the player spawn position for the exit.
+            var causeOfDeath = endCondition switch
+            {
+                _ when endCondition == ItemType.Pit => "Fell into a pit",
+                _ when endCondition == ItemType.Exit => "",
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+
+            rootVisualElement.Q<Label>("results-message").text = causeOfDeath;
+            var title = endCondition == ItemType.Exit ? "Winner!" : "Womp, womp, you lose!";
             rootVisualElement.Q<Label>("results-title").text = title;
             ShowScreen("results");
         };
@@ -34,7 +48,7 @@ public class UIService : Services.Service
         // General button events
         rootVisualElement.Q<Button>("join-back").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("game-quit").clicked += () => {
-            Services.Get<GameService>().EndGame(false);
+            Services.Get<GameService>().EndGame(ItemType.None);
             ShowScreen("title");
         };
         rootVisualElement.Q<Button>("results-quit").clicked += () => { ShowScreen("title"); };

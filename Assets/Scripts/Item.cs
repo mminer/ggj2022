@@ -18,4 +18,5 @@ public enum ItemType
     Monster,
     Pit,
     Weapon,
+    None,
 }
