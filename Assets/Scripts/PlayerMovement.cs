@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
                 switch (item.Value.itemType)
                 {
                     case ItemType.Exit:
-                        Services.Get<GameService>().EndGame(EndCondition.Won);
+                        Services.Get<UIService>().ShowGlyphScreen();
                         break;
 
                     case ItemType.Pit:

@@ -38,19 +38,13 @@
         <ui:Label name="glyphs-title" class="title" text="Select Glyphs" />
         <ui:Label name="glyphs-warning" class="subtitle" text="...at your own peril" />
         <ui:VisualElement name="glyphs-combo">
-            <ui:VisualElement name="glyphs-combo-slot1" class="glyph">
-                <ui:Button class="button up" text="+" />
+            <ui:VisualElement name="glyphs-combo-me" class="glyph">
+                <ui:Label  class="glyph-label" text="Me" />
                 <ui:TextField />
                 <ui:Image />
-                <ui:Button class="button down" text="-" />
             </ui:VisualElement>
-            <ui:VisualElement name="glyphs-combo-slot2" class="glyph">
-                <ui:Button class="button up" text="+" />
-                <ui:TextField />
-                <ui:Image />
-                <ui:Button class="button down" text="-" />
-            </ui:VisualElement>
-            <ui:VisualElement name="glyphs-combo-slot3" class="glyph">
+            <ui:VisualElement name="glyphs-combo-friend" class="glyph">
+                <ui:Label  class="glyph-label" text="Friend" />
                 <ui:Button class="button up" text="+" />
                 <ui:TextField />
                 <ui:Image />

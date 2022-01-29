@@ -144,7 +144,7 @@
 }
 
 .glyph {
-    margin: 15px 0;
+    margin: 15px 25px;
     width: 100px;
     justify-content: center;
     align-items: center;
@@ -155,10 +155,15 @@
 }
 
 #glyphs-combo .up, #glyphs-combo .down {
-    width: 100%;
+    width: 50%;
     height: 15px;
 }
 
 #glyphs-combo TextField {
     display: none;
+}
+
+#glyphs-combo .glyph-label {
+    color: white;
+    font-size: 24px;
 }

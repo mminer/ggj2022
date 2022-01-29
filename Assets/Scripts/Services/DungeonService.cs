@@ -37,6 +37,11 @@ public class DungeonService : Services.Service
         SetTilesFromCells();
     }
 
+    public int GetGlyphByPlayer(Player playerAssignment)
+    {
+        return playerAssignment == Player.Player1 ? dungeon.glyphs[0] : dungeon.glyphs[1];
+    }
+
     Tile GetTile(Vector3Int tilePosition, Player playerAssignment)
     {
         var (isWalkable, item) = dungeon[tilePosition];

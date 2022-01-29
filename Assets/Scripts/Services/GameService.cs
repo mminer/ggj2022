@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -71,9 +72,33 @@ public class GameService : Services.Service
         Destroy(player);
     }
 
-    private void OnSubmitGlyphs(int[] combo)
+    public int MyPlayerGlyph()
     {
-        Debug.Log("TODO: check if combo is expected");
-        EndGame(EndCondition.BadPasscode);
+        return Services.Get<DungeonService>().GetGlyphByPlayer(playerAssignment);
+    }
+
+    private bool ValidateGlyphs(int[] glyphs)
+    {
+        var requiredGlyphs = Services.Get<DungeonService>().dungeon.glyphs.ToList();
+
+        foreach (var glyph in glyphs)
+        {
+            if (requiredGlyphs.Contains(glyph))
+            {
+                requiredGlyphs.Remove(glyph);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void OnSubmitGlyphs(int[] glyphs)
+    {
+        var endCondition = ValidateGlyphs(glyphs) ? EndCondition.Won : EndCondition.BadPasscode;
+        EndGame(endCondition);
     }
 }

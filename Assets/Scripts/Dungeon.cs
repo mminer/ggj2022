@@ -11,6 +11,7 @@ using UnityEngine;
 public class Dungeon
 {
     public readonly Vector3Int playerSpawnPosition;
+    public readonly int[] glyphs;
 
     readonly Item?[,] items;
     readonly Map map;
@@ -25,6 +26,17 @@ public class Dungeon
     {
         items = new Item?[width, height];
         rng = new RandomNumberGenerator(gameCode);
+
+        // Glyphs
+        var maxGlyphIndex = Services.Get<UIService>().GlyphSpriteCount() - 1;
+        glyphs = new int[]
+        {
+            // Skip index 0 because it's a blank glyph and that's no fun
+            rng.Next(1, maxGlyphIndex),
+            rng.Next(1, maxGlyphIndex)
+        };
+
+        Debug.Log($"Required glyphs: {glyphs[0]}, {glyphs[1]}");
 
         var mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(
             width,

@@ -14,9 +14,12 @@ public class UIService : Services.Service
     public event OnSubmitGlyphsHandler OnSubmitGlyphs;
 
     List<VisualElement> screens;
+    Sprite[] glyphSprites;
 
     void Awake()
     {
+        glyphSprites = Resources.LoadAll<Sprite>("Textures/runeGrey_tileOutline_sheet");
+
         var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
         screens = rootVisualElement.Query(className: "screen").ToList();
         ShowScreen(defaultScreenName);
@@ -45,7 +48,7 @@ public class UIService : Services.Service
             };
 
             rootVisualElement.Q<Label>("results-message").text = causeOfDeath;
-            var title = endCondition == EndCondition.Won ? "Winner!" : "Womp, womp, you lose!";
+            var title = endCondition == EndCondition.Won ? "You live!" : "Dead!";
             rootVisualElement.Q<Label>("results-title").text = title;
             ShowScreen("results");
         };
@@ -78,10 +81,9 @@ public class UIService : Services.Service
         {
             var glyphs = rootVisualElement.Query(className: "glyph").ToList();
             var combo = glyphs.Select(glyph => Int32.Parse(glyph.Q<TextField>().value)).ToArray();
-            Debug.Log($"Submit combo: {combo[0]}-{combo[1]}-{combo[2]}");
+            Debug.Log($"Submit combo: {combo[0]}-{combo[1]}");
             OnSubmitGlyphs?.Invoke(combo);
         };
-        GenerateGlyphs(rootVisualElement);
 
         // Join game events
         var codeError = rootVisualElement.Q<Label>("join-inputs-error");
@@ -116,22 +118,38 @@ public class UIService : Services.Service
         }
     }
 
-    private void GenerateGlyphs(VisualElement rootVisualElement)
+    public int GlyphSpriteCount()
     {
-        var sprites = Resources.LoadAll<Sprite>("Textures/runeGrey_tileOutline_sheet");
-        var glyphs = rootVisualElement.Query(className: "glyph").ToList();
-        glyphs.ForEach((glyph) => GenerateGlyph(glyph, sprites));
+        return glyphSprites.Length;
     }
 
-    private void GenerateGlyph(VisualElement glyph, Sprite[] sprites)
+    public void ShowGlyphScreen()
     {
+        var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
+        GenerateMyGlyph(rootVisualElement);
+        GenerateFriendGlyph(rootVisualElement);
+        ShowScreen("glyphs");
+    }
+
+    private void GenerateMyGlyph(VisualElement rootVisualElement)
+    {
+        var glyph = rootVisualElement.Q("glyphs-combo-me");
         var input = glyph.Q<TextField>();
         var image = glyph.Q<Image>();
-        var index = Random.Range(1, sprites.Length);
+        var index = Services.Get<GameService>().MyPlayerGlyph();
+        UpdateGlyph(image, input, index);
+    }
+
+    private void GenerateFriendGlyph(VisualElement rootVisualElement)
+    {
+        var glyph = rootVisualElement.Q("glyphs-combo-friend");
+        var input = glyph.Q<TextField>();
+        var image = glyph.Q<Image>();
+        var index = Random.Range(1, glyphSprites.Length);
 
         glyph.Q<Button>(className: "up").clicked += () =>
         {
-            if (index + 1 >= sprites.Length)
+            if (index + 1 >= glyphSprites.Length)
             {
                 // Skip the blank glyph at index 0
                 index = 1;
@@ -141,7 +159,7 @@ public class UIService : Services.Service
                 index++;
             }
 
-            UpdateGlyph(image, input, index, sprites);
+            UpdateGlyph(image, input, index);
             Services.Get<AudioService>().PlayCycleGlyph();
         };
 
@@ -150,24 +168,25 @@ public class UIService : Services.Service
             // Skip the blank glyph at index 0
             if (index - 1 <= 0)
             {
-                index = sprites.Length - 1;
+                index = glyphSprites.Length - 1;
             }
             else
             {
                 index--;
             }
 
-            UpdateGlyph(image, input, index, sprites);
+            UpdateGlyph(image, input, index);
             Services.Get<AudioService>().PlayCycleGlyph();
         };
 
-        UpdateGlyph(image, input, index, sprites);
+        UpdateGlyph(image, input, index);
     }
 
-    private static void UpdateGlyph(Image image, TextField input, int index, Sprite[] sprites)
+    private void UpdateGlyph(Image image, TextField input, int index)
     {
-        image.sprite = sprites[index];
+        image.sprite = glyphSprites[index];
         input.value = index.ToString();
+        Debug.Log($"Selected glyph: {index}");
     }
 
     private static bool IsValidCode(string code)
