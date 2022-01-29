@@ -68,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
                         break;
 
                     case ItemType.Pit:
+                        Services.Get<AudioService>().PlayTrap(ItemType.Pit);
                         Services.Get<GameService>().EndGame(ItemType.Pit);
                         break;
                 }

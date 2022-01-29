@@ -542,6 +542,10 @@ PrefabInstance:
       value: Services
       objectReference: {fileID: 0}
     - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: pitFall
+      value: 
+      objectReference: {fileID: 8300000, guid: 58c7b2bd3109b423ca56f2f8beca7a2b, type: 3}
+    - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: footstepVolume
       value: 0.1
       objectReference: {fileID: 0}
