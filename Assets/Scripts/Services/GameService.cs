@@ -13,10 +13,14 @@ class GameService : Services.Service
         {
             isPlayer1 = false;
         }
+        else
+        {
+            code = GameCodeUtility.GenerateGameCode();
+        }
 
+        Services.Get<UIService>().ShowGameCode(code);
         var mapService = Services.Get<MapService>();
-        // TODO: get this value from the UI
-        mapService.GenerateMap("abcd");
+        mapService.GenerateMap(code);
 
         // Spawn player.
         Instantiate(playerPrefab, mapService.playerSpawnPoint, Quaternion.identity);

@@ -22,7 +22,6 @@ class UIService : Services.Service
         rootVisualElement.Q<Button>("title-buttons-create").clicked += () =>
         {
             Services.Get<GameService>().StartGame();
-            rootVisualElement.Q<Label>("game-code").text = "Code: FIXME";
             ShowScreen("game");
         };
 
@@ -57,6 +56,12 @@ class UIService : Services.Service
         {
             screen.style.display = screen.name == screenName ? DisplayStyle.Flex : DisplayStyle.None;
         }
+    }
+
+    public void ShowGameCode(string code)
+    {
+        var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
+        rootVisualElement.Q<Label>("game-code").text = "Code: " + code;
     }
 
     private static bool IsValidCode(string code)
