@@ -35,7 +35,7 @@ class GameService : Services.Service
         mapService.GenerateMap(code);
 
         // Spawn player.
-        Instantiate(playerPrefab, mapService.playerSpawnPoint, Quaternion.identity);
+        Instantiate(playerPrefab, mapService.playerSpawnPosition, Quaternion.identity);
 
         if (OnGameStarted != null)
         {
