@@ -72,8 +72,7 @@ class MapService : Services.Service
 
     public bool CanMoveToTile(Vector3Int targetTilePosition)
     {
-        // TODO
-        return true;
+        return map[targetTilePosition.x, targetTilePosition.y].IsWalkable;
     }
 
     public void GenerateMap(string gameCode)
