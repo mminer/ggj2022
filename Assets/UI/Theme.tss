@@ -67,7 +67,6 @@
 }
 
 /* Game (HUD) Screen */
-
 #game {
     height: 50px;
     flex-direction: row;
@@ -84,4 +83,9 @@
     color: yellow;
     font-size: 24px;
     -unity-font-style: bold;
+}
+
+/* Results Screen */
+#results {
+
 }

@@ -16,9 +16,25 @@ class UIService : Services.Service
         screens = rootVisualElement.Query(className: "screen").ToList();
         ShowScreen(defaultScreenName);
 
+        var gameService = Services.Get<GameService>();
+
+        gameService.OnGameStarted += (code) =>
+        {
+            rootVisualElement.Q<Label>("game-code").text = "Code: " + code;
+            Debug.Log("Game Code: " + code);
+        };
+
+        gameService.OnGameEnded += (isWinner) =>
+        {
+            var title = isWinner ? "Winner!" : "Womp, womp, you lose!";
+            rootVisualElement.Q<Label>("results-title").text = title;
+            ShowScreen("results");
+        };
+
         // General button events
         rootVisualElement.Q<Button>("join-back").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("game-quit").clicked += () => { ShowScreen("title"); };
+        rootVisualElement.Q<Button>("results-quit").clicked += () => { ShowScreen("title"); };
         rootVisualElement.Q<Button>("title-buttons-join").clicked += () => { ShowScreen("join"); };
         rootVisualElement.Q<Button>("title-buttons-create").clicked += () =>
         {
@@ -57,13 +73,6 @@ class UIService : Services.Service
         {
             screen.style.display = screen.name == screenName ? DisplayStyle.Flex : DisplayStyle.None;
         }
-    }
-
-    public void ShowGameCode(string code)
-    {
-        var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
-        rootVisualElement.Q<Label>("game-code").text = "Code: " + code;
-        Debug.Log("Game Code: " + code);
     }
 
     private static bool IsValidCode(string code)

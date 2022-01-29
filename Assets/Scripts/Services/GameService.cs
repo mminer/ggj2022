@@ -6,6 +6,12 @@ class GameService : Services.Service
 {
     [SerializeField] GameObject playerPrefab;
 
+    public delegate void OnGameStartedHandler(string gameCode);
+    public event OnGameStartedHandler OnGameStarted;
+
+    public delegate void OnGameEndedHandler(bool isWinner);
+    public event OnGameEndedHandler OnGameEnded;
+
     bool isPlayer1 = true;
 
     public void StartGame(string code = null)
@@ -25,11 +31,23 @@ class GameService : Services.Service
             Debug.Log($"Generated code: {code}");
         }
 
-        Services.Get<UIService>().ShowGameCode(code);
         var mapService = Services.Get<MapService>();
         mapService.GenerateMap(code);
 
         // Spawn player.
         Instantiate(playerPrefab, mapService.playerSpawnPoint, Quaternion.identity);
+
+        if (OnGameStarted != null)
+        {
+            OnGameStarted(code);
+        }
+    }
+
+    public void EndGame(bool isWinner)
+    {
+        if (OnGameEnded != null)
+        {
+            OnGameEnded(isWinner);
+        }
     }
 }
