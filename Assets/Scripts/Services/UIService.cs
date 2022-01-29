@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -20,7 +21,7 @@ class UIService : Services.Service
         rootVisualElement.Q<Button>("title-buttons-join").clicked += () => { ShowScreen("join"); };
         rootVisualElement.Q<Button>("title-buttons-create").clicked += () =>
         {
-            Debug.Log("TODO: Generate map with no code");
+            Services.Get<GameService>().StartGame();
             ShowScreen("game");
         };
 
@@ -35,14 +36,14 @@ class UIService : Services.Service
 
             var code = codeInput.value;
 
-            if (code.Length == codeInput.maxLength)
+            if (IsValidCode((code)))
             {
-                Debug.Log("TODO: Generate map with code: " + code);
+                Services.Get<GameService>().StartGame(code);
                 ShowScreen("game");
             }
             else
             {
-                codeError.text = "Please enter a 4-digit game code";
+                codeError.text = "Invalid game code =(";
             }
         };
     }
@@ -55,5 +56,11 @@ class UIService : Services.Service
         {
             screen.style.display = screen.name == screenName ? DisplayStyle.Flex : DisplayStyle.None;
         }
+    }
+
+    private static bool IsValidCode(string code)
+    {
+        Regex r = new Regex(@"^[A-Fa-f0-9]{4}$");
+        return r.IsMatch(code);
     }
 }
