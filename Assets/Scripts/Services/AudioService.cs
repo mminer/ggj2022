@@ -14,6 +14,9 @@ public class AudioService : Services.Service
     [Header("== Traps ==")]
     [SerializeField] private AudioClip pitFall;
 
+    [Header("== UI Buttons ==")]
+    [SerializeField] private AudioClip cycleGlyph;
+
     void Awake()
     {
         playerAudioSource = GetComponent<AudioSource>();
@@ -46,6 +49,13 @@ public class AudioService : Services.Service
                 throw new ArgumentOutOfRangeException();
         };
 
+        playerAudioSource.Play();
+    }
+
+    public void PlayCycleGlyph()
+    {
+        playerAudioSource.clip = cycleGlyph;
+        playerAudioSource.volume = 0.1f;
         playerAudioSource.Play();
     }
 }

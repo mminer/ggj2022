@@ -136,6 +136,7 @@ public class UIService : Services.Service
             }
 
             UpdateGlyph(image, input, index, sprites);
+            Services.Get<AudioService>().PlayCycleGlyph();
         };
 
         glyph.Q<Button>(className: "down").clicked += () =>
@@ -151,6 +152,7 @@ public class UIService : Services.Service
             }
 
             UpdateGlyph(image, input, index, sprites);
+            Services.Get<AudioService>().PlayCycleGlyph();
         };
 
         UpdateGlyph(image, input, index, sprites);
