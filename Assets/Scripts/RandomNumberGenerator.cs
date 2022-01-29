@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Wraps Unity's random number generator for use with RogueSharp.
 /// </summary>
-class RandomNumberGenerator : IRandom
+public class RandomNumberGenerator : IRandom
 {
     int seed;
     long timesUsed;

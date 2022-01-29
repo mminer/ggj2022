@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-class DungeonService : Services.Service
+public class DungeonService : Services.Service
 {
     [SerializeField] Tilemap tilemap;
 

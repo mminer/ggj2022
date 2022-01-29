@@ -8,12 +8,12 @@ using UnityEngine;
 /// <summary>
 /// Represents an environment (a map + items).
 /// </summary>
-class Dungeon
+public class Dungeon
 {
     public readonly Vector3Int playerSpawnPosition;
 
-    readonly Map map;
     readonly Item?[,] items;
+    readonly Map map;
     readonly RandomNumberGenerator rng;
     readonly Cell[] walkableCells;
 

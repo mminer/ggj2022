@@ -1,6 +1,4 @@
-using System;
-
-readonly struct Item
+public readonly struct Item
 {
     public readonly ItemType itemType;
     public readonly Player playerVisibility;
@@ -12,7 +10,7 @@ readonly struct Item
     }
 }
 
-enum ItemType
+public enum ItemType
 {
     Door,
     Exit,

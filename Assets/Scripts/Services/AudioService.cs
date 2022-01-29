@@ -1,6 +1,6 @@
 using UnityEngine;
 
-class AudioService : Services.Service
+public class AudioService : Services.Service
 {
     AudioSource playerAudioSource;
 

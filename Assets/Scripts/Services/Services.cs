@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Service locator pattern.
 /// </summary>
-class Services : MonoBehaviour
+public class Services : MonoBehaviour
 {
     /// <summary>
     /// Base class for services.

@@ -1,7 +1,7 @@
 using System.Globalization;
 using UnityEngine;
 
-static class GameCodeUtility
+public static class GameCodeUtility
 {
     const int maxSeed = 65_536; // 16^4 so that all seeds can be represented by 4 character hex string
 

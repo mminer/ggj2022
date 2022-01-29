@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-class GameService : Services.Service
+public class GameService : Services.Service
 {
     [SerializeField] GameObject playerPrefab;
 
@@ -23,7 +23,7 @@ class GameService : Services.Service
         // We don't want this to happen, so randomize it now.
         Random.InitState((int)DateTime.Now.Ticks);
 
-        if (code == null)
+        if (string.IsNullOrEmpty(code))
         {
             playerAssignment = Player.Player1;
             Debug.Log($"Playing as player 1");
@@ -41,6 +41,12 @@ class GameService : Services.Service
         dungeonService.GenerateDungeon(code);
 
         // Spawn player.
+
+        if (player != null)
+        {
+            Destroy(player);
+        }
+
         player = Instantiate(playerPrefab, dungeonService.dungeon.playerSpawnPosition, Quaternion.identity);
 
         OnGameStarted?.Invoke(code);
