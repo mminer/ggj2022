@@ -41,12 +41,12 @@ public class DungeonService : Services.Service
         RegenerateVisible(dungeon.playerSpawnPosition);
     }
 
-    public int GetGlyphByPlayer(Player playerAssignment)
+    public int GetGlyphByPlayer(PlayerType playerAssignment)
     {
-        return playerAssignment == Player.Player1 ? dungeon.glyphs[0] : dungeon.glyphs[1];
+        return playerAssignment == PlayerType.Player1 ? dungeon.glyphs[0] : dungeon.glyphs[1];
     }
 
-    Tile GetTile(Vector3Int tilePosition, Player playerAssignment)
+    Tile GetTile(Vector3Int tilePosition, PlayerType playerAssignment)
     {
         var (isWalkable, item) = dungeon[tilePosition];
 
@@ -79,8 +79,8 @@ public class DungeonService : Services.Service
             {
                 var tilePosition = new Vector3Int(x, y);
                 var tile = GetTile(tilePosition, playerAssignment);
-                
-                
+
+
                 var isVisible = dungeon.isVisible(tilePosition);
                 float distanceFromCharacter = Vector3Int.Distance(tilePosition, visiblePosition);
 

@@ -86,7 +86,7 @@ public class Dungeon
             _ => throw new ArgumentOutOfRangeException(),
         };
 
-        items[exitPosition.x, exitPosition.y] = new Item(ItemType.Exit, Player.Both);
+        items[exitPosition.x, exitPosition.y] = new Item(ItemType.Exit, PlayerType.Both);
         CarvePathToEmptyTile(exitPosition, GetPathCarveDirection(exitPosition));
 
         // Item positions:
@@ -201,7 +201,7 @@ public class Dungeon
                 continue;
             }
 
-            items[position.x, position.y] = new Item(ItemType.Pit, Player.Player2);
+            items[position.x, position.y] = new Item(ItemType.Pit, PlayerType.Player2);
             placedPits++;
         }
     }

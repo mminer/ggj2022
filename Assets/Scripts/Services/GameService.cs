@@ -21,7 +21,7 @@ public class GameService : Services.Service
     public delegate void OnGameEndedHandler(EndCondition endCondition);
     public event OnGameEndedHandler OnGameEnded;
 
-    public Player playerAssignment { get; private set; } = Player.None;
+    public PlayerType playerAssignment { get; private set; } = PlayerType.None;
 
     GameObject player;
 
@@ -39,7 +39,7 @@ public class GameService : Services.Service
 
         if (string.IsNullOrEmpty(code))
         {
-            playerAssignment = Player.Player1;
+            playerAssignment = PlayerType.Player1;
             Debug.Log($"Playing as player 1");
 
             code = GameCodeUtility.GenerateGameCode();
@@ -47,7 +47,7 @@ public class GameService : Services.Service
         }
         else
         {
-            playerAssignment = Player.Player2;
+            playerAssignment = PlayerType.Player2;
             Debug.Log($"Playing as player 2");
         }
 
