@@ -98,6 +98,7 @@ public class UIService : Services.Service
 
             if (IsValidCode((code)))
             {
+                codeInput.value = String.Empty;
                 Services.Get<GameService>().StartGame(code);
                 ShowScreen("game");
             }

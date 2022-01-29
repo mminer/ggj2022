@@ -69,6 +69,7 @@
 
 #join-inputs-code {
     width: 200px;
+    color: black;
 }
 
 #join-inputs Button {
