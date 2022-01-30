@@ -1,7 +1,7 @@
-public readonly struct Ground
+public struct Ground
 {
     public readonly GroundType groundType;
-    public readonly Item? item;
+    public Item? item { get; set; }
 
     public Ground(GroundType type, Item? item)
     {
