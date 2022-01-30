@@ -27,7 +27,8 @@ body {
 }
 
 #title {
-    color: white;
+    margin: 50px 0;
+    color: deeppink;
     text-align: left;
 }
 
@@ -51,6 +52,24 @@ body {
     color: #ccc;
     width: 550px;
     text-align: justify;
+}
+
+#instructions .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#instructions .row img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+#instructions .row p {
+    margin-right: 15px;
+    text-align: left;
 }
 
 #credits {
