@@ -90,24 +90,34 @@ public class UIService : Services.Service
         var codeError = rootVisualElement.Q<Label>("join-inputs-error");
         var codeInput = rootVisualElement.Q<TextField>("join-inputs-code");
         codeInput.maxLength = 4;
-        rootVisualElement.Q<Button>("join-inputs-button").clicked += () =>
+        codeInput.RegisterCallback<KeyUpEvent>(e =>
         {
-            // Reset error text
-            codeError.text = String.Empty;
-
-            var code = codeInput.value;
-
-            if (IsValidCode((code)))
+            if (e.keyCode == KeyCode.Return)
             {
-                codeInput.value = String.Empty;
-                Services.Get<GameService>().StartGame(code);
-                ShowScreen("game");
+                SubmitGameCode(codeInput, codeError);
             }
-            else
-            {
-                codeError.text = "Invalid game code =(";
-            }
-        };
+        });
+
+        rootVisualElement.Q<Button>("join-inputs-button").clicked += () => SubmitGameCode(codeInput, codeError);
+    }
+
+    private void SubmitGameCode(TextField codeInput, Label codeError)
+    {
+        // Reset error text
+        codeError.text = String.Empty;
+
+        var code = codeInput.value;
+
+        if (IsValidCode((code)))
+        {
+            codeInput.value = String.Empty;
+            Services.Get<GameService>().StartGame(code);
+            ShowScreen("game");
+        }
+        else
+        {
+            codeError.text = "Invalid game code =(";
+        }
     }
 
     public void ShowScreen(string screenName)
