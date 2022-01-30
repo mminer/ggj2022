@@ -625,5 +625,9 @@ PrefabInstance:
       propertyPath: monsterKilledPlayer.Array.data[2]
       value: 
       objectReference: {fileID: 8300000, guid: a5eb8c2807bd747fd93fef97c5c87a10, type: 3}
+    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: defaultScreenName
+      value: title
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b63d1966db784dd682733e384159c3a, type: 3}

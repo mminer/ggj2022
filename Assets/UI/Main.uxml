@@ -35,20 +35,14 @@
         <ui:Button name="results-quit" class="button" text="Quit" />
     </ui:VisualElement>
     <ui:VisualElement name="glyphs" class="screen full-screen">
-        <ui:Label name="glyphs-title" class="title" text="Select Glyphs" />
-        <ui:Label name="glyphs-warning" class="subtitle" text="...at your peril" />
-        <ui:VisualElement name="glyphs-combo">
-            <ui:VisualElement name="glyphs-combo-me" class="glyph">
-                <ui:Label  class="glyph-label" text="My Glyph" />
-                <ui:TextField />
+        <ui:Label name="glyphs-title" class="title" text="A door to bridge two worlds" />
+        <ui:Label name="glyphs-warning" class="subtitle" text="Select your friend's glyph... at your peril" />
+        <ui:VisualElement name="glyphs-door">
+            <ui:VisualElement name="glyphs-door-selector">
+                <ui:Button name="glyphs-door-selector-up" class="button" text="+" />
+                <ui:TextField name="glyphs-door-selector-input" />
                 <ui:Image />
-            </ui:VisualElement>
-            <ui:VisualElement name="glyphs-combo-friend" class="glyph">
-                <ui:Label  class="glyph-label" text="Ask Friend" />
-                <ui:Button class="button up" text="+" />
-                <ui:TextField />
-                <ui:Image />
-                <ui:Button class="button down" text="-" />
+                <ui:Button name="glyphs-door-selector-down" class="button" text="-" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="glyphs-buttons">

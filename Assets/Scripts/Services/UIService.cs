@@ -80,10 +80,9 @@ public class UIService : Services.Service
         rootVisualElement.Q<Button>("glyphs-buttons-cancel").clicked += () => { ShowScreen("game"); };
         rootVisualElement.Q<Button>("glyphs-buttons-submit").clicked += () =>
         {
-            var glyphs = rootVisualElement.Query(className: "glyph").ToList();
-            var combo = glyphs.Select(glyph => Int32.Parse(glyph.Q<TextField>().value)).ToArray();
-            Debug.Log($"Submit combo: {combo[0]}-{combo[1]}");
-            OnSubmitGlyphs?.Invoke(combo);
+            var inputGlyph = Int32.Parse(rootVisualElement.Q<TextField>("glyphs-door-selector-input").value);
+            var myGlyph = Services.Get<GameService>().MyPlayerGlyph();
+            OnSubmitGlyphs?.Invoke(new int[] { myGlyph, inputGlyph });
         };
 
         // Join game events
@@ -138,8 +137,7 @@ public class UIService : Services.Service
     public void ShowGlyphScreen()
     {
         var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
-        GenerateMyGlyph(rootVisualElement);
-        GenerateFriendGlyph(rootVisualElement);
+        GenerateGlyphSelector(rootVisualElement);
         ShowScreen("glyphs");
     }
 
@@ -152,14 +150,14 @@ public class UIService : Services.Service
         UpdateGlyph(image, input, index);
     }
 
-    private void GenerateFriendGlyph(VisualElement rootVisualElement)
+    private void GenerateGlyphSelector(VisualElement rootVisualElement)
     {
-        var glyph = rootVisualElement.Q("glyphs-combo-friend");
-        var input = glyph.Q<TextField>();
-        var image = glyph.Q<Image>();
+        var selector = rootVisualElement.Q("glyphs-door-selector");
+        var input = selector.Q<TextField>();
+        var image = selector.Q<Image>();
         var index = Random.Range(1, glyphSprites.Length);
 
-        glyph.Q<Button>(className: "up").clicked += () =>
+        selector.Q<Button>("glyphs-door-selector-up").clicked += () =>
         {
             if (index + 1 >= glyphSprites.Length)
             {
@@ -175,7 +173,7 @@ public class UIService : Services.Service
             Services.Get<AudioService>().PlayCycleGlyph();
         };
 
-        glyph.Q<Button>(className: "down").clicked += () =>
+        selector.Q<Button>("glyphs-door-selector-down").clicked += () =>
         {
             // Skip the blank glyph at index 0
             if (index - 1 <= 0)
