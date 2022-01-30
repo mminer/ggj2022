@@ -141,6 +141,7 @@
 #glyphs-combo {
     flex-direction: row;
     margin-bottom: 30px;
+    /*background-image: resource("Textures/TilemapColored_36");*/
 }
 
 .glyph {
@@ -152,6 +153,7 @@
 
 .glyph Image {
     margin: 15px 0;
+    width: 100%;
 }
 
 #glyphs-combo .up, #glyphs-combo .down {
