@@ -141,19 +141,18 @@
 #glyphs-combo {
     flex-direction: row;
     margin-bottom: 30px;
-    /*background-image: resource("Textures/TilemapColored_36");*/
 }
 
 .glyph {
     margin: 15px 25px;
-    width: 100px;
     justify-content: center;
     align-items: center;
 }
 
 .glyph Image {
     margin: 15px 0;
-    width: 100%;
+    width: 150px;
+    height: 150px;
 }
 
 #glyphs-combo .up, #glyphs-combo .down {

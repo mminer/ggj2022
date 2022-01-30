@@ -36,15 +36,15 @@
     </ui:VisualElement>
     <ui:VisualElement name="glyphs" class="screen full-screen">
         <ui:Label name="glyphs-title" class="title" text="Select Glyphs" />
-        <ui:Label name="glyphs-warning" class="subtitle" text="...at your own peril" />
+        <ui:Label name="glyphs-warning" class="subtitle" text="...at your peril" />
         <ui:VisualElement name="glyphs-combo">
             <ui:VisualElement name="glyphs-combo-me" class="glyph">
-                <ui:Label  class="glyph-label" text="Me" />
+                <ui:Label  class="glyph-label" text="My Glyph" />
                 <ui:TextField />
                 <ui:Image />
             </ui:VisualElement>
             <ui:VisualElement name="glyphs-combo-friend" class="glyph">
-                <ui:Label  class="glyph-label" text="Friend" />
+                <ui:Label  class="glyph-label" text="Ask Friend" />
                 <ui:Button class="button up" text="+" />
                 <ui:TextField />
                 <ui:Image />
@@ -53,7 +53,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="glyphs-buttons">
             <ui:Button name="glyphs-buttons-cancel" class="button" text="Cancel" />
-            <ui:Button name="glyphs-buttons-submit" class="button" text="I bet on my life these are the glyphs" />
+            <ui:Button name="glyphs-buttons-submit" class="button" text="I bet my life these are the glyphs" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
