@@ -31,6 +31,11 @@ public class Dungeon
     Vector3Int bottomRight => new(map.Width - 2, 1);
     Vector3Int topLeft => new(1, map.Height - 2);
     Vector3Int topRight => new(map.Width - 2, map.Height - 2);
+    
+    Vector3Int middleLeft => new(1, map.Height / 2 - 2);
+    Vector3Int middleRight => new(map.Width - 2, map.Height / 2 - 2);
+    Vector3Int middleTop => new(map.Width / 2 - 2, map.Height - 2);
+    Vector3Int middleBottom => new(map.Width / 2 - 2, 1);
 
     public struct Light {
         private FieldOfView<Cell> fov;
@@ -86,8 +91,9 @@ public class Dungeon
         entrancePosition = GetRandomCornerPosition();
         CarvePathToEmptyTile(entrancePosition, GetPathCarveDirection(entrancePosition));
 
-        var riverStart = GetRandomCornerPosition();
+        var riverStart = GetRandomSidePosition();
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
+        riverStart = GetRandomCornerPosition();
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
 
         // Exit position.
@@ -191,17 +197,46 @@ public class Dungeon
     {
         var iteration = 0;
 
-        while (iteration < 100 && position.x < map.Width && position.x >= 0 && position.y < map.Height && position.y >= 0)
+        var offset = direction;
+        if(rng.NextBool()) {
+            offset.x = 0;
+        } else {
+            offset.y = 0;
+        }
+
+        bool posWithin(Vector3Int pos) {
+            return pos.x < map.Width && pos.x >= 0 && pos.y < map.Height && pos.y >= 0;
+        }
+
+        int randomOffset() {
+            return (rng.NextBool() ? rng.NextBool() ? 0 : -1 : 1);
+        }
+
+        while (iteration < 50)
         {
-            if (!map.IsWalkable(position))
-            {
-                var cell = map[position];
-                cell.GroundType = GroundType.Water;
-                cell.IsTransparent = true;
+            void set(Vector3Int pos) {
+                if (posWithin(pos) && !map.IsWalkable(pos))
+                {
+                    var cell = map[pos];
+                    cell.GroundType = GroundType.Water;
+                    cell.IsTransparent = true;
+                }
+
             }
 
-            position.x += rng.Next(2) * direction.x;
-            position.y += rng.Next(2) * direction.y;
+            set(position);
+
+            // make it 3 wide
+            var offsetPos = position + offset;
+            var offsetPos2 = position - offset;
+
+            if(posWithin(offsetPos)){ set(offsetPos); }
+            if(posWithin(offsetPos2)){ set(offsetPos2); }
+            
+            position.x += Mathf.Clamp(randomOffset() * direction.x + randomOffset(), -1, 1);
+            position.y += Mathf.Clamp(randomOffset() * direction.y + randomOffset(), -1, 1);
+
+            // position += direction;
 
             iteration++;
         }
@@ -216,6 +251,10 @@ public class Dungeon
             _ when cornerPosition == bottomRight => Vector3Int.up + Vector3Int.left,
             _ when cornerPosition == topLeft => Vector3Int.down + Vector3Int.right,
             _ when cornerPosition == topRight => Vector3Int.down + Vector3Int.left,
+            _ when cornerPosition == middleLeft => Vector3Int.right,
+            _ when cornerPosition == middleRight => Vector3Int.left,
+            _ when cornerPosition == middleBottom => Vector3Int.up,
+            _ when cornerPosition == middleTop => Vector3Int.down,
             _ => throw new ArgumentOutOfRangeException(),
         };
     }
@@ -223,6 +262,12 @@ public class Dungeon
     Vector3Int GetRandomCornerPosition()
     {
         var cornerPositions = new[] { bottomLeft, bottomRight, topLeft, topRight };
+        return cornerPositions[rng.Next(cornerPositions.Length)];
+    }
+    
+    Vector3Int GetRandomSidePosition()
+    {
+        var cornerPositions = new[] { bottomLeft, bottomRight, topLeft, topRight, middleLeft, middleRight, middleBottom, middleTop };
         return cornerPositions[rng.Next(cornerPositions.Length)];
     }
 
