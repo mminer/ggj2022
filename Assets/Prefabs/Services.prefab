@@ -62,9 +62,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultScreenName: title
+  player1Sprite: {fileID: -1816054244, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
+  player2Sprite: {fileID: 548991842, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
   pitSprite: {fileID: -1286408863, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
   monsterSprite: {fileID: -1391583301, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-  monumentSprite: {fileID: 21300000, guid: 353c21240f18b9746bf0522f84c2bf80, type: 3}
+  monumentSprite: {fileID: 21300000, guid: aab0ee583ebe4db4a838e68491ef44f5, type: 3}
   exitSprite: {fileID: -179797286, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
 --- !u!1 &4287173784685381179
 GameObject:
