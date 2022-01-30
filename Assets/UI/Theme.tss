@@ -20,7 +20,6 @@
 }
 
 .title {
-    height: 100px;
     margin-bottom: 15px;
     font-size: 60px;
     -unity-font-style: bold;
