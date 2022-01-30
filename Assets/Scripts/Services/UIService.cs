@@ -93,7 +93,12 @@ public class UIService : Services.Service
 
         // General button events
         rootVisualElement.Q<Button>("join-back").clicked += () => { ShowScreen("title"); };
-        rootVisualElement.Q<Button>("monument-close").clicked += () => { ShowScreen("game"); };
+        var monumentCloseButton = rootVisualElement.Q<Button>("monument-close");
+        monumentCloseButton.clicked += () => { ShowScreen("game"); };
+        monumentCloseButton.RegisterCallback<KeyUpEvent>(e =>
+        {
+            ShowGameScreenIfMoved(e.keyCode);
+        });
         rootVisualElement.Q<Button>("game-quit").clicked += () => {
             Services.Get<GameService>().EndGame(EndCondition.Quit);
             ShowScreen("title");
@@ -132,20 +137,7 @@ public class UIService : Services.Service
         beginAdventureButton.clicked += () => { ShowScreen("game"); };
         beginAdventureButton.RegisterCallback<KeyUpEvent>(e =>
         {
-            switch (e.keyCode)
-            {
-                case KeyCode.W:
-                case KeyCode.A:
-                case KeyCode.S:
-                case KeyCode.D:
-                case KeyCode.UpArrow:
-                case KeyCode.DownArrow:
-                case KeyCode.LeftArrow:
-                case KeyCode.RightArrow:
-                case KeyCode.Return:
-                    ShowScreen("game");
-                    break;
-            }
+            ShowGameScreenIfMoved(e.keyCode);
         });
 
         // Join game events
@@ -161,6 +153,24 @@ public class UIService : Services.Service
         });
 
         rootVisualElement.Q<Button>("join-inputs-button").clicked += () => SubmitGameCode(codeInput, codeError);
+    }
+
+    private void ShowGameScreenIfMoved(KeyCode keyCode)
+    {
+        switch (keyCode)
+        {
+            case KeyCode.W:
+            case KeyCode.A:
+            case KeyCode.S:
+            case KeyCode.D:
+            case KeyCode.UpArrow:
+            case KeyCode.DownArrow:
+            case KeyCode.LeftArrow:
+            case KeyCode.RightArrow:
+            case KeyCode.Return:
+                ShowScreen("game");
+                break;
+        }
     }
 
     private void SubmitGameCode(TextField codeInput, Label codeError)
