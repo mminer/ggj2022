@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="game" class="screen">
-        <ui:Button name="game-quit" class="button" text="Quit" />
-        <ui:Button name="game-mute" class="button" text="SFX: ON" />
+        <ui:Button name="game-quit" class="button" text="Quit" focusable="false" />
+        <ui:Button name="game-mute" class="button" text="SFX: ON" focusable="false" />
         <ui:Label name="game-code" text="Join with code XXXX" />
     </ui:VisualElement>
     <ui:VisualElement name="title" class="screen full-screen">
