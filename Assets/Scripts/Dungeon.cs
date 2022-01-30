@@ -22,6 +22,12 @@ public class Dungeon
     public Dungeon.Light[] lights { private set; get; }
     readonly RandomNumberGenerator rng;
 
+    // Four corners inside the walls.
+    Vector3Int bottomLeft => new(1, 1);
+    Vector3Int bottomRight => new(map.Width - 2, 1);
+    Vector3Int topLeft => new(1, map.Height - 2);
+    Vector3Int topRight => new(map.Width - 2, map.Height - 2);
+
     public struct Light {
         private FieldOfView fov;
         public readonly Vector3Int point;
@@ -75,48 +81,20 @@ public class Dungeon
             SetGround(new Vector3Int(cell.X, cell.Y, 0), cell.IsWalkable ? GroundType.Grass : GroundType.Wall, null);
         }
 
-        // Four corners inside the walls.
-        var bottomLeft = new Vector3Int(1, 1);
-        var bottomRight = new Vector3Int(width - 2, 1);
-        var topLeft = new Vector3Int(1, height - 2);
-        var topRight = new Vector3Int(width - 2, height - 2);
-
-        Vector3Int GetPathCarveDirection(Vector3Int position)
-        {
-            // Diagonal away from the wall.
-            return position switch
-            {
-                _ when position == bottomLeft => Vector3Int.up + Vector3Int.right,
-                _ when position == bottomRight => Vector3Int.up + Vector3Int.left,
-                _ when position == topLeft => Vector3Int.down + Vector3Int.right,
-                _ when position == topRight => Vector3Int.down + Vector3Int.left,
-                _ => throw new ArgumentOutOfRangeException(),
-            };
-        }
-
-        // Entrance position:
-
-        var entrancePositionPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
-        entrancePosition = entrancePositionPossibilities[rng.Next(entrancePositionPossibilities.Length)];
+        // Entrance position.
+        entrancePosition = GetRandomCornerPosition();
         CarvePathToEmptyTile(entrancePosition, GetPathCarveDirection(entrancePosition));
-
         RemoveEmptyCell(entrancePosition);
 
-        var riverStart = entrancePositionPossibilities[rng.Next(entrancePositionPossibilities.Length)];
+        var riverStart = GetRandomCornerPosition();
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
 
-        // Exit position:
-
-        // Choose the corner opposite the entrance for the exit.
-        exitPosition = entrancePosition switch
+        // Exit position.
+        do
         {
-            _ when entrancePosition == bottomLeft => topRight,
-            _ when entrancePosition == bottomRight => topLeft,
-            _ when entrancePosition == topLeft => bottomRight,
-            _ when entrancePosition == topRight => bottomLeft,
-            _ => throw new ArgumentOutOfRangeException(),
-        };
+            exitPosition = GetRandomCornerPosition();
+        } while (exitPosition == entrancePosition);
 
         CarvePathToEmptyTile(exitPosition, GetPathCarveDirection(exitPosition));
         var item = new Item(ItemType.Exit, exitPosition, PlayerType.Both);
@@ -260,6 +238,25 @@ public class Dungeon
                 yield return (item.Value, position);
             }
         }
+    }
+
+    Vector3Int GetPathCarveDirection(Vector3Int cornerPosition)
+    {
+        // Diagonal toward the opposite corner.
+        return cornerPosition switch
+        {
+            _ when cornerPosition == bottomLeft => Vector3Int.up + Vector3Int.right,
+            _ when cornerPosition == bottomRight => Vector3Int.up + Vector3Int.left,
+            _ when cornerPosition == topLeft => Vector3Int.down + Vector3Int.right,
+            _ when cornerPosition == topRight => Vector3Int.down + Vector3Int.left,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+    }
+
+    Vector3Int GetRandomCornerPosition()
+    {
+        var cornerPositions = new[] { bottomLeft, bottomRight, topLeft, topRight };
+        return cornerPositions[rng.Next(cornerPositions.Length)];
     }
 
     Vector3Int GetRandomWalkablePosition()
