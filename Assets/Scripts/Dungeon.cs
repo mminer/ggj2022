@@ -11,7 +11,6 @@ using UnityEngine;
 public class Dungeon
 {
     public readonly Vector3Int entrancePosition;
-    public readonly Vector3Int exitPosition;
     public readonly int[] glyphs;
 
     readonly List<Cell> emptyCells;
@@ -91,6 +90,9 @@ public class Dungeon
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
 
         // Exit position.
+
+        Vector3Int exitPosition;
+
         do
         {
             exitPosition = GetRandomCornerPosition();
@@ -103,28 +105,16 @@ public class Dungeon
 
         // Item positions:
 
-        foreach (var kvp in itemCounts)
+        foreach (var (itemType, count) in itemCounts)
         {
-            switch (kvp.Key)
+            switch (itemType)
             {
-                case ItemType.Door:
-                    PlaceDoors(kvp.Value);
-                    break;
-
-                case ItemType.Key:
-                    PlaceKeys(kvp.Value);
-                    break;
-
                 case ItemType.Monster:
-                    PlaceMonsters(kvp.Value);
+                    PlaceMonsters(count);
                     break;
 
                 case ItemType.Pit:
-                    PlacePits(kvp.Value);
-                    break;
-
-                case ItemType.Weapon:
-                    PlaceWeapons(kvp.Value);
+                    PlacePits(count);
                     break;
             }
         }
@@ -261,11 +251,8 @@ public class Dungeon
 
     Vector3Int GetRandomWalkablePosition()
     {
-        while (true)
-        {
-            var cell = emptyCells[rng.Next(emptyCells.Count)];
-            return new Vector3Int(cell.X, cell.Y);
-        }
+        var cell = emptyCells[rng.Next(emptyCells.Count)];
+        return new Vector3Int(cell.X, cell.Y);
     }
 
     /// <summary>
@@ -295,16 +282,6 @@ public class Dungeon
         }
     }
 
-    void PlaceDoors(int doorCount)
-    {
-        throw new NotImplementedException();
-    }
-
-    void PlaceKeys(int keyCount)
-    {
-        throw new NotImplementedException();
-    }
-
     void PlaceMonsters(int monsterCount)
     {
         var placedMonsters = 0;
@@ -331,11 +308,6 @@ public class Dungeon
             SetGround(position, GroundType.Grass, item);
             placedPits++;
         }
-    }
-
-    void PlaceWeapons(int weaponCount)
-    {
-        throw new NotImplementedException();
     }
 
     private void PlaceLights(int lightCount)
