@@ -67,6 +67,12 @@
     margin: 15px 0;
 }
 
+#title-credits {
+    margin-top: 50px;
+    -unity-text-align: middle-center;
+    color: #333;
+}
+
 /* Join Game Screen */
 #join-title, #join-inputs-instructions {
     color: white;

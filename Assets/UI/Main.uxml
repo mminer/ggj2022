@@ -11,6 +11,7 @@
             <ui:Button name="title-buttons-join" class="button" text="Join Game" />
             <ui:Button name="title-buttons-instructions" class="button" text="How to Play" />
         </ui:VisualElement>
+        <ui:Label name="title-credits" text="Created by Matthew Miner, Brad Keys, and Chris Bogie\nGlobal Game Jam 2022" />
     </ui:VisualElement>
     <ui:VisualElement name="join" class="screen full-screen">
         <ui:Button name="join-back" class="button" text="...Back" />
