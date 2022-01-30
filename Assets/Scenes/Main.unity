@@ -498,10 +498,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1760482963}
     - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
-      propertyPath: monumentTile
-      value: 
-      objectReference: {fileID: 11400000, guid: 96d0b4ad5f1d45742a3382b5b9802928, type: 2}
-    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: overrideItemVisibility
       value: 0
       objectReference: {fileID: 0}
@@ -641,25 +637,5 @@ PrefabInstance:
       propertyPath: monsterKilledPlayer.Array.data[2]
       value: 
       objectReference: {fileID: 8300000, guid: a5eb8c2807bd747fd93fef97c5c87a10, type: 3}
-    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
-      propertyPath: pitSprite
-      value: 
-      objectReference: {fileID: -1286408863, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
-      propertyPath: exitSprite
-      value: 
-      objectReference: {fileID: -179797286, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
-      propertyPath: monsterSprite
-      value: 
-      objectReference: {fileID: -1391583301, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
-      propertyPath: monumentSprite
-      value: 
-      objectReference: {fileID: 351229633, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
-      propertyPath: defaultScreenName
-      value: title
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
