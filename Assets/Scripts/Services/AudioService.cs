@@ -52,9 +52,14 @@ public class AudioService : Services.Service
     {
         var trapAudioClip = trap switch
         {
-            _ when trap == ItemType.Pit => pitFall,
-            _ => throw new ArgumentOutOfRangeException(),
+            ItemType.Pit => pitFall,
+            _ => null,
         };
+
+        if (trapAudioClip == null)
+        {
+            return;
+        }
 
         PlaySoundEffect(trapAudioClip);
     }

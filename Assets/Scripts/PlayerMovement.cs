@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
             var (isWalkable, item) = Services.Get<DungeonService>().dungeon[targetTilePosition];
 
             if (!isWalkable) { return; }
-            
+
             Services.Get<DungeonService>().RegenerateVisible(targetTilePosition);
             Services.Get<AudioService>().PlayFootstep();
 
@@ -66,6 +66,11 @@ public class PlayerMovement : MonoBehaviour
                 {
                     case ItemType.Exit:
                         Services.Get<UIService>().ShowGlyphScreen();
+                        break;
+
+                    case ItemType.Monster:
+                        Services.Get<AudioService>().PlayTrap(ItemType.Monster);
+                        Services.Get<GameService>().EndGame(EndCondition.AteByMonster);
                         break;
 
                     case ItemType.Pit:

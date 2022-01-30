@@ -15,6 +15,7 @@ public class DungeonService : Services.Service
     [SerializeField] int roomMinSize = 3;
 
     [Header("Items")]
+    [SerializeField] int monsterCount = 5;
     [SerializeField] int pitCount = 5;
 
     [Header("Lights")]
@@ -24,6 +25,7 @@ public class DungeonService : Services.Service
     [Header("Tiles")]
     [SerializeField] TileBase exitTile;
     [SerializeField] TileBase groundTile;
+    [SerializeField] TileBase monsterTile;
     [SerializeField] TileBase pitTile;
     [SerializeField] TileBase wallTile;
 
@@ -35,6 +37,7 @@ public class DungeonService : Services.Service
     {
         var itemCounts = new Dictionary<ItemType, int>
         {
+            { ItemType.Monster, monsterCount },
             { ItemType.Pit, pitCount },
         };
 
@@ -60,7 +63,7 @@ public class DungeonService : Services.Service
                 ItemType.Door => throw new NotImplementedException(),
                 ItemType.Exit => exitTile,
                 ItemType.Key => throw new NotImplementedException(),
-                ItemType.Monster => throw new NotImplementedException(),
+                ItemType.Monster => monsterTile,
                 ItemType.Pit => pitTile,
                 ItemType.Weapon => throw new NotImplementedException(),
                 _ => throw new ArgumentOutOfRangeException(),

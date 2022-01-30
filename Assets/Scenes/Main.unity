@@ -494,6 +494,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1760482963}
     - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: wallTile
+      value: 
+      objectReference: {fileID: 11400000, guid: 86ab93059e9f54cf9bd1f7f25503162b, type: 2}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: visibleRadius
       value: 5
       objectReference: {fileID: 0}

@@ -223,7 +223,15 @@ public class Dungeon
 
     void PlaceMonsters(int monsterCount)
     {
-        throw new NotImplementedException();
+        var placedMonsters = 0;
+
+        while (placedMonsters < monsterCount)
+        {
+            var position = GetRandomWalkablePositionThatPlayerCanCircumvent();
+            var visibleToPlayer1 = rng.NextBool();
+            SetItem(ItemType.Monster, position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
+            placedMonsters++;
+        }
     }
 
     void PlacePits(int pitCount)
@@ -244,7 +252,7 @@ public class Dungeon
         throw new NotImplementedException();
     }
 
-    private void PlaceLights(int lightCount) 
+    private void PlaceLights(int lightCount)
     {
         lights = new Dungeon.Light[] {};
 
@@ -261,7 +269,7 @@ public class Dungeon
         }
     }
 
-    public void RegenerateVisible(Vector3Int at, int radius) 
+    public void RegenerateVisible(Vector3Int at, int radius)
     {
         fov.ComputeFov(at.x, at.y, radius, true);
     }

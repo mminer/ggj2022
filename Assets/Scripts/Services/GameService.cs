@@ -5,10 +5,11 @@ using Random = UnityEngine.Random;
 
 public enum EndCondition
 {
-    Won,
-    Quit,
-    FellInPit,
+    AteByMonster,
     BadPasscode,
+    FellInPit,
+    Quit,
+    Won,
 }
 
 public class GameService : Services.Service

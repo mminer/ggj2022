@@ -41,9 +41,10 @@ public class UIService : Services.Service
             // Choose the corner opposite the player spawn position for the exit.
             var causeOfDeath = endCondition switch
             {
-                _ when endCondition == EndCondition.FellInPit => "Fell into a pit",
-                _ when endCondition == EndCondition.BadPasscode => "Insulted the Gods",
-                _ when endCondition == EndCondition.Won => "",
+                EndCondition.AteByMonster => "Tasted Delicious",
+                EndCondition.BadPasscode => "Insulted the Gods",
+                EndCondition.FellInPit => "Fell into a pit",
+                EndCondition.Won => "",
                 _ => throw new ArgumentOutOfRangeException(),
             };
 
