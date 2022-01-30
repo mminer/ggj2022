@@ -50,4 +50,12 @@
             <ui:Button name="glyphs-buttons-submit" class="button" text="I bet my life these are the glyphs" />
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:VisualElement name="monument" class="screen full-screen">
+        <ui:Label class="title" text="Monument" />
+        <ui:Label class="subtitle" text="The symbol of my land" />
+        <ui:VisualElement name="monument-container">
+            <ui:Image name="monument-container-glyph" />
+        </ui:VisualElement>
+        <ui:Button name="monument-close" class="button" text="I shall remember" />
+    </ui:VisualElement>
 </ui:UXML>

@@ -190,4 +190,25 @@
     display: none;
 }
 
+#monument .subtitle {
+    color: green;
+}
 
+#monument-container {
+    width: 171px;
+    height: 264px;
+    background-image: resource("Textures/monument");
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+}
+
+#monument-container Image {
+    width: 54px;
+    height: 60px;
+    margin-top: 60px; /* Align nicely in the monument image */
+    margin-right: 5px;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 3px;
+}

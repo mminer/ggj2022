@@ -56,6 +56,7 @@ public class UIService : Services.Service
 
         // General button events
         rootVisualElement.Q<Button>("join-back").clicked += () => { ShowScreen("title"); };
+        rootVisualElement.Q<Button>("monument-close").clicked += () => { ShowScreen("game"); };
         rootVisualElement.Q<Button>("game-quit").clicked += () => {
             Services.Get<GameService>().EndGame(EndCondition.Quit);
             ShowScreen("title");
@@ -141,13 +142,18 @@ public class UIService : Services.Service
         ShowScreen("glyphs");
     }
 
-    private void GenerateMyGlyph(VisualElement rootVisualElement)
+    public void ShowMonumentScreen()
     {
-        var glyph = rootVisualElement.Q("glyphs-combo-me");
-        var input = glyph.Q<TextField>();
-        var image = glyph.Q<Image>();
-        var index = Services.Get<GameService>().MyPlayerGlyph();
-        UpdateGlyph(image, input, index);
+        var rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
+        GenerateMonumentGlyph(rootVisualElement);
+        ShowScreen("monument");
+    }
+
+    private void GenerateMonumentGlyph(VisualElement rootVisualElement)
+    {
+        var image = rootVisualElement.Q<Image>("monument-container-glyph");
+        var glyphIndex = Services.Get<GameService>().MyPlayerGlyph();
+        image.sprite = glyphSprites[glyphIndex];
     }
 
     private void GenerateGlyphSelector(VisualElement rootVisualElement)
