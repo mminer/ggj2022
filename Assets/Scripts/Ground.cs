@@ -14,6 +14,5 @@ public enum GroundType
 {
     Grass,
     Water,
-    Bridge,
     Wall
 }
