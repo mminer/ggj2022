@@ -1,4 +1,7 @@
-# Global Game Jam 2022
+# Dungeon, With Friends!
+
+Our [Global Game Jam 2022 submission](https://globalgamejam.org/2022/games/dungeon-friends-9).
+A WebGL game built with Unity 2021.2.
 
 By Brad Keys, Chris Bogie, and Matthew Miner.
 
