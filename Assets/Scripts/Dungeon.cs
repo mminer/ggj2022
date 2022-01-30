@@ -13,7 +13,7 @@ public class Dungeon
     public class Cell : RogueSharp.Cell
     {
         public GroundType GroundType { get; set; }
-        public Item? Item { get; set; }
+        public Item Item { get; set; }
         public Vector3Int Position => new(X, Y);
     }
 
@@ -25,6 +25,8 @@ public class Dungeon
     readonly GoalMap<Cell> goalMap;
     readonly Map<Cell> map;
     readonly RandomNumberGenerator rng;
+
+    IEnumerable<Cell> cellsWithItems => map.GetAllCells().Where(cell => cell.Item != null);
 
     // Four corners inside the walls.
     Vector3Int bottomLeft => new(1, 1);
@@ -104,7 +106,7 @@ public class Dungeon
 
         var exitCell = map[exitPosition];
         exitCell.GroundType = GroundType.Grass;
-        exitCell.Item = new Item(ItemType.Exit, exitPosition, PlayerType.Both);
+        exitCell.Item = new Item(ItemType.Exit, PlayerType.Both);
 
         // Item positions:
 
@@ -135,31 +137,34 @@ public class Dungeon
 
     public void UpdateMovableItems()
     {
-        var cellsWithMonsters = map
-            .GetAllCells()
-            .Where(cell => cell.Item is { itemType: ItemType.Monster });
+        var movableCells = cellsWithItems
+            .Where(cell => cell.Item.movementDirection != Vector3Int.zero)
+            .ToArray();
 
-        foreach (var cell in cellsWithMonsters)
+        foreach (var cell in movableCells)
         {
-            var item = cell.Item!.Value;
+            var destinationCell = map[cell.Position + cell.Item.movementDirection];
 
-            if (cell.Position != item.originalPosition)
+            // If the destination is a wall or an item, try going the opposite way.
+            if (!IsCellEmpty(destinationCell))
             {
-                map[item.originalPosition].Item = item;
-                cell.Item = null;
+                cell.Item.ReverseMovementDirection();
+                destinationCell = map[cell.Position + cell.Item.movementDirection];
             }
-            else
+
+            // Still a wall or another item? If so, stay put.
+            if (!IsCellEmpty(destinationCell))
             {
-                var emptyAdjacentCell = GetRandomEmptyAdjacentCell(cell);
-
-                if (emptyAdjacentCell == null)
-                {
-                    continue;
-                }
-
-                map[item.originalPosition].Item = null;
-                emptyAdjacentCell.Item = item;
+                continue;
             }
+
+            if (cell.Y == 24)
+            {
+                Debug.Log($"MOVE {destinationCell.X}; {cell.X}");
+            }
+
+            destinationCell.Item = cell.Item;
+            cell.Item = null;
         }
     }
 
@@ -226,18 +231,6 @@ public class Dungeon
         return cornerPositions[rng.Next(cornerPositions.Length)];
     }
 
-    Cell GetRandomEmptyAdjacentCell(Cell cell)
-    {
-        var emptyAdjacentCells = map
-            .GetAdjacentCells(cell.Position)
-            .Where(IsCellEmpty)
-            .ToArray();
-
-        return emptyAdjacentCells.Length > 0
-            ? emptyAdjacentCells[rng.Next(emptyAdjacentCells.Length)]
-            : null;
-    }
-
     Cell GetRandomEmptyCell()
     {
         var emptyCells = map.GetAllCells().Where(IsCellEmpty).ToArray();
@@ -253,9 +246,8 @@ public class Dungeon
         {
             var cell = GetRandomEmptyCell();
 
-            var obstacles = map
-                .GetAllCells()
-                .Where(c => c.Item.HasValue && c.Item.Value.itemType != ItemType.Exit)
+            var obstacles = cellsWithItems
+                .Where(c => c.Item!.itemType != ItemType.Exit)
                 .Select(c => new Point(c.X, c.Y))
                 .Concat(new[] { new Point(cell.X, cell.Y) });
 
@@ -281,9 +273,8 @@ public class Dungeon
         {
             var cell = GetRandomEmptyCell();
 
-            var obstacles = map
-                .GetAllCells()
-                .Where(c => c.Item.HasValue && c.Item.Value.itemType != ItemType.Exit)
+            var obstacles = cellsWithItems
+                .Where(c => c.Item!.itemType != ItemType.Exit)
                 .Select(c => new Point(c.X, c.Y));
 
             goalMap.ClearObstacles();
@@ -302,7 +293,7 @@ public class Dungeon
 
     bool IsCellEmpty(Cell cell)
     {
-        return cell.IsWalkable && !cell.Item.HasValue && cell.Position != entrancePosition;
+        return cell.IsWalkable && cell.Item == null && cell.Position != entrancePosition;
     }
 
     void PlaceMonsters(int monsterCount)
@@ -312,8 +303,10 @@ public class Dungeon
         while (placedMonsters < monsterCount)
         {
             var cell = GetRandomEmptyCellThatPlayerCanCircumvent();
-            var visibleToPlayer1 = rng.NextBool();
-            cell.Item = new Item(ItemType.Monster, cell.Position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
+            var playerVisibility = rng.NextBool() ? PlayerType.Player1 : PlayerType.Player2;
+            var movementDirections = new[] { Vector3Int.down, Vector3Int.left, Vector3Int.right, Vector3Int.up };
+            var randomMovementDirection = movementDirections[rng.Next(movementDirections.Length)];
+            cell.Item = new Item(ItemType.Monster, playerVisibility, randomMovementDirection);
             placedMonsters++;
         }
     }
@@ -326,7 +319,7 @@ public class Dungeon
         {
             var cell = GetRandomEmptyCellThatPlayerCanCircumvent();
             var visibleToPlayer1 = rng.NextBool();
-            cell.Item = new Item(ItemType.Pit, cell.Position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
+            cell.Item = new Item(ItemType.Pit, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
             placedPits++;
         }
     }
@@ -352,17 +345,17 @@ public class Dungeon
     {
         var cell = GetRandomEmptyCellThatPlayerCanReach();
         cell.GroundType = GroundType.Grass;
-        cell.Item = new Item(ItemType.Monument, cell.Position, PlayerType.Both);
+        cell.Item = new Item(ItemType.Monument, PlayerType.Both);
     }
 
     public void RegenerateVisible(Vector3Int at, int radius)
     {
         fov.ComputeFov(at.x, at.y, radius, true);
     }
-    
+
     public void BloodSplat(Vector3Int at)
     {
-        map[at].Item = new Item(ItemType.Blood, at, PlayerType.Both);
+        map[at].Item = new Item(ItemType.Blood, PlayerType.Both);
     }
 
     public bool isVisible(Vector3Int at)

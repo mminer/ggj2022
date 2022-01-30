@@ -68,28 +68,25 @@ public class PlayerMovement : MonoBehaviour
 
             transform.position = targetTilePosition;
 
-            if (cell.Item.HasValue)
+            switch (cell.Item?.itemType)
             {
-                switch (cell.Item.Value.itemType)
-                {
-                    case ItemType.Exit:
-                        Services.Get<UIService>().ShowGlyphScreen();
-                        break;
+                case ItemType.Exit:
+                    Services.Get<UIService>().ShowGlyphScreen();
+                    break;
 
-                    case ItemType.Monument:
-                        Services.Get<AudioService>().PlayMonumentJingle();
-                        Services.Get<UIService>().ShowMonumentScreen();
-                        break;
+                case ItemType.Monument:
+                    Services.Get<AudioService>().PlayMonumentJingle();
+                    Services.Get<UIService>().ShowMonumentScreen();
+                    break;
 
-                    case ItemType.Monster:
-                        StartCoroutine(MonsterDeath(cell.Item.Value.playerVisibility, 0.4f));
-                        break;
+                case ItemType.Monster:
+                    StartCoroutine(MonsterDeath(cell.Item.playerVisibility, 0.4f));
+                    break;
 
-                    case ItemType.Pit:
-                        Services.Get<AudioService>().PlayTumble();
-                        playerVisual.GetComponentInChildren<Animator>().Play("Fall");
-                        break;
-                }
+                case ItemType.Pit:
+                    Services.Get<AudioService>().PlayTumble();
+                    playerVisual.GetComponentInChildren<Animator>().Play("Fall");
+                    break;
             }
         }
     }
