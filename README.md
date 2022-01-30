@@ -1,6 +1,6 @@
 # Global Game Jam 2022
 
-By Brad Keys and Matthew Miner.
+By Brad Keys, Chris Bogie, and Matthew Miner.
 
 
 ## Third Party Assets
@@ -15,5 +15,5 @@ Tilemap: [Micro Roguelike by Kenney](https://www.kenney.nl/assets/micro-roguelik
 License: CC0 1.0 Universal
 
 Map generation library: [RogueSharp](https://github.com/FaronBracy/RogueSharp) \
-License: MIT
+License: MIT \
 DLL built from commit 1b9e746 (version 5.0.0-pre4)

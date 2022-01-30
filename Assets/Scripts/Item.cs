@@ -23,5 +23,4 @@ public enum ItemType
     Pit,
     Weapon,
     Passcode,
-    None,
 }
