@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,11 +11,14 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 direction = Vector2.zero;
 
+    [SerializeField] GameObject playerVisual;
+
     void Awake()
     {
         moveAction.performed += OnMove;
         moveAction.canceled += OnDoneMove;
-        this.GetComponentInChildren<AnimationCallback>().OnAnimationComplete += AnimationComplete;
+
+        playerVisual.GetComponentInChildren<AnimationCallback>().OnAnimationComplete += AnimationComplete;
     }
 
     void OnEnable()
@@ -78,17 +82,30 @@ public class PlayerMovement : MonoBehaviour
                         break;
 
                     case ItemType.Monster:
-                        Services.Get<AudioService>().PlayTrap(ItemType.Monster);
-                        Services.Get<GameService>().EndGame(EndCondition.AteByMonster);
+                        StartCoroutine(KILL(0.4f));
                         break;
 
                     case ItemType.Pit:
                         Services.Get<AudioService>().PlayTumble();
-                        GetComponentInChildren<Animator>().Play("Fall");
+                        playerVisual.GetComponentInChildren<Animator>().Play("Fall");
                         break;
                 }
             }
         }
+    }
+
+    IEnumerator KILL(float bloodyDelay)
+    {
+        playerVisual.SetActive(false);
+
+        Services.Get<AudioService>().PlayTrap(ItemType.Monster);
+
+        var dungeonService = Services.Get<DungeonService>();
+        dungeonService.BloodSplat(Vector3Int.FloorToInt(transform.position));
+
+        yield return new WaitForSeconds(bloodyDelay);
+
+        Services.Get<GameService>().EndGame(EndCondition.AteByMonster);
     }
 
     void AnimationComplete(string name) {

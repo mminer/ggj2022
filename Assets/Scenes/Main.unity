@@ -490,6 +490,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: blood
+      value: 
+      objectReference: {fileID: 5048226192038875423, guid: 9b0f69dd4e2275c4ab40f9dea5eb4abc, type: 3}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 1760482963}
@@ -497,6 +501,9 @@ PrefabInstance:
       propertyPath: monumentTile
       value: 
       objectReference: {fileID: 11400000, guid: e569df902ba1c4e489182fc20b258462, type: 2}
+      propertyPath: bloodTile
+      value: 
+      objectReference: {fileID: 11400000, guid: 903a4e40df58e064ba522b6bc6033a56, type: 2}
     - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: overrideItemVisibility
       value: 0
