@@ -164,4 +164,8 @@ public class DungeonService : Services.Service
         dungeon.BloodSplat(position);
         SetTilesFromCells(position);
     }
+
+    public Sprite SpriteAt(Vector3Int position) {
+        return tilemap.GetSprite(position);
+    }
 }

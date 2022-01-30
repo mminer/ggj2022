@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
                         break;
 
                     case ItemType.Monster:
-                        StartCoroutine(KILL(0.4f));
+                        StartCoroutine(MonsterDeath(0.4f));
                         break;
 
                     case ItemType.Pit:
@@ -94,17 +94,22 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    IEnumerator KILL(float bloodyDelay)
+    IEnumerator MonsterDeath(float bloodyDelay)
     {
+        var position = Vector3Int.FloorToInt(transform.position);
+
         playerVisual.SetActive(false);
 
         Services.Get<AudioService>().PlayTrap(ItemType.Monster);
 
         var dungeonService = Services.Get<DungeonService>();
-        dungeonService.BloodSplat(Vector3Int.FloorToInt(transform.position));
+        var monsterSprite = dungeonService.SpriteAt(position);
+        
+        dungeonService.BloodSplat(position);
 
         yield return new WaitForSeconds(bloodyDelay);
 
+        Services.Get<UIService>().monsterSprite = monsterSprite;
         Services.Get<GameService>().EndGame(EndCondition.AteByMonster);
     }
 

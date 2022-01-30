@@ -13,7 +13,7 @@ public class UIService : Services.Service
     [SerializeField] Sprite player1Sprite;
     [SerializeField] Sprite player2Sprite;
     [SerializeField] Sprite pitSprite;
-    [SerializeField] Sprite monsterSprite;
+    [SerializeField] public Sprite monsterSprite;
     [SerializeField] Sprite monumentSprite;
     [SerializeField] Sprite exitSprite;
 
