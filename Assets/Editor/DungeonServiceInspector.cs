@@ -9,8 +9,6 @@ public class DungeonServiceInspector : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        EditorGUILayout.Space();
-        GUILayout.Label("Debug", EditorStyles.boldLabel);
 
         using (new EditorGUI.DisabledScope(!Application.isPlaying))
         using (new EditorGUILayout.HorizontalScope())

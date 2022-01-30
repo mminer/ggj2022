@@ -32,6 +32,11 @@ public class DungeonService : Services.Service
 
     [SerializeField] private int visibleRadius = 3;
 
+    [Header("Debug")]
+    [SerializeField] bool disableLighting;
+    [SerializeField] bool overrideItemVisibility;
+    [SerializeField] PlayerType itemVisibilityOverride = PlayerType.Both;
+
     public Dungeon dungeon { get; private set; }
 
     public void GenerateDungeon(string gameCode)
@@ -57,7 +62,7 @@ public class DungeonService : Services.Service
     {
         var (isWalkable, ground) = dungeon[tilePosition];
 
-        if (ground?.item is Item item && item.playerVisibility.HasFlag(playerAssignment))
+        if (ground?.item is Item item && IsItemVisible(item, playerAssignment))
         {
             return item.itemType switch
             {
@@ -86,6 +91,13 @@ public class DungeonService : Services.Service
 
     }
 
+    bool IsItemVisible(Item item, PlayerType playerAssignment)
+    {
+        return overrideItemVisibility
+            ? itemVisibilityOverride.HasFlag(playerAssignment)
+            : item.playerVisibility.HasFlag(playerAssignment);
+    }
+
     void SetTilesFromCells(Vector3Int visiblePosition)
     {
         var playerAssignment = Services.Get<GameService>().playerAssignment;
@@ -98,6 +110,11 @@ public class DungeonService : Services.Service
                 var tile = GetTile(tilePosition, playerAssignment);
                 tilemap.SetTile(tilePosition, tile);
                 tilemap.SetTileFlags(tilePosition, TileFlags.None); // needed to change the color of a tile...
+
+                if (disableLighting)
+                {
+                    continue;
+                }
 
                 var tileColor = Color.black;
 
