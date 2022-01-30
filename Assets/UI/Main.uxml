@@ -5,7 +5,12 @@
         <ui:Label name="game-code" text="Join with code XXXX" />
     </ui:VisualElement>
     <ui:VisualElement name="title" class="screen full-screen">
-        <ui:Label name="title-label" class="title" text="GGJ 2022!" />
+        <ui:Label name="title-label" class="title" text="Dungeon" />
+        <ui:VisualElement name="title-subtitle" class="row">
+            <ui:Image name="title-subtitle-player1" />
+            <ui:Label class="subtitle" text="With Friends!" />
+            <ui:Image name="title-subtitle-player2" />
+        </ui:VisualElement>
         <ui:VisualElement name="title-buttons">
             <ui:Button name="title-buttons-create" class="button" text="Create Game" />
             <ui:Button name="title-buttons-join" class="button" text="Join Game" />

@@ -650,6 +650,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -1391583301, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
     - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: player1Sprite
+      value: 
+      objectReference: {fileID: -1816054244, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
+    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: player2Sprite
+      value: 
+      objectReference: {fileID: 548991842, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
+    - target: {fileID: 5223395973156807994, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: monumentSprite
       value: 
       objectReference: {fileID: 351229633, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}

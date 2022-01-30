@@ -53,8 +53,8 @@
 }
 
 /* Title Screen */
-#title-label {
-    color: red;
+#title .title, #title .subtitle {
+    color: deeppink;
 }
 
 #title-buttons {
@@ -71,6 +71,12 @@
     margin-top: 50px;
     -unity-text-align: middle-center;
     color: #333;
+}
+
+#title-subtitle Image {
+    width: 35px;
+    height: 35px;
+    margin-right: 5px;
 }
 
 /* Join Game Screen */

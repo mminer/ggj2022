@@ -9,6 +9,9 @@ using Random = UnityEngine.Random;
 public class UIService : Services.Service
 {
     [SerializeField] string defaultScreenName;
+    [Header("== Sprites ==")]
+    [SerializeField] Sprite player1Sprite;
+    [SerializeField] Sprite player2Sprite;
     [SerializeField] Sprite pitSprite;
     [SerializeField] Sprite monsterSprite;
     [SerializeField] Sprite monumentSprite;
@@ -58,6 +61,10 @@ public class UIService : Services.Service
             rootVisualElement.Q<Label>("results-title").text = title;
             ShowScreen("results");
         };
+
+        // Title screen
+        rootVisualElement.Q<Image>("title-subtitle-player1").sprite = player1Sprite;
+        rootVisualElement.Q<Image>("title-subtitle-player2").sprite = player2Sprite;
 
         // General button events
         rootVisualElement.Q<Button>("join-back").clicked += () => { ShowScreen("title"); };
