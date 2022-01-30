@@ -10,11 +10,11 @@ public class PathfindingMap : IDisposable
     readonly Map map;
     readonly MapState originalState;
 
-    public PathfindingMap(Map map, Item?[,] items)
+    public PathfindingMap(Map map, Ground?[,] ground)
     {
         this.map = map;
         this.originalState = map.Save();
-        MarkItemCellsUnwalkable(items);
+        MarkItemCellsUnwalkable(ground);
     }
 
     public void Dispose()
@@ -22,13 +22,14 @@ public class PathfindingMap : IDisposable
         map.Restore(originalState);
     }
 
-    void MarkItemCellsUnwalkable(Item?[,] items)
+    void MarkItemCellsUnwalkable(Ground?[,] ground)
     {
         for (var x = 0; x < map.Width; x++)
         {
             for (var y = 0; y < map.Height; y++)
             {
-                var item = items[x, y];
+                var groundTile = ground[x, y];
+                var item = groundTile?.item;
 
                 if (item.HasValue && item.Value.itemType != ItemType.Exit)
                 {

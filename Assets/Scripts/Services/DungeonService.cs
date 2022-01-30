@@ -19,7 +19,7 @@ public class DungeonService : Services.Service
     [SerializeField] int pitCount = 5;
 
     [Header("Lights")]
-    [SerializeField] int lightCount = 5;
+    [SerializeField] int maxLights = 5;
     [SerializeField] private Color lightColor = Color.white;
 
     [Header("Tiles")]
@@ -28,6 +28,7 @@ public class DungeonService : Services.Service
     [SerializeField] TileBase monsterTile;
     [SerializeField] TileBase pitTile;
     [SerializeField] TileBase wallTile;
+    [SerializeField] TileBase waterTile;
 
     [SerializeField] private int visibleRadius = 3;
 
@@ -41,7 +42,7 @@ public class DungeonService : Services.Service
             { ItemType.Pit, pitCount },
         };
 
-        dungeon = new Dungeon(gameCode, width, height, maxRooms, roomMaxSize, roomMinSize, itemCounts, lightCount);
+        dungeon = new Dungeon(gameCode, width, height, maxRooms, roomMaxSize, roomMinSize, itemCounts, maxLights);
         Debug.Log($"Generated dungeon: \n{dungeon}");
 
         RegenerateVisible(dungeon.entrancePosition);
@@ -54,11 +55,11 @@ public class DungeonService : Services.Service
 
     TileBase GetTile(Vector3Int tilePosition, PlayerType playerAssignment)
     {
-        var (isWalkable, item) = dungeon[tilePosition];
+        var (isWalkable, ground) = dungeon[tilePosition];
 
-        if (item.HasValue && item.Value.playerVisibility.HasFlag(playerAssignment))
+        if (ground?.item is Item item && item.playerVisibility.HasFlag(playerAssignment))
         {
-            return item.Value.itemType switch
+            return item.itemType switch
             {
                 ItemType.Door => throw new NotImplementedException(),
                 ItemType.Exit => exitTile,
@@ -69,10 +70,20 @@ public class DungeonService : Services.Service
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }
-        else
+        else if(ground is Ground nonNullGround)
         {
-            return isWalkable ? groundTile : wallTile;
+            return nonNullGround.groundType switch
+            {
+                GroundType.Wall => wallTile,
+                GroundType.Water => waterTile,
+                GroundType.Grass => groundTile,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
         }
+        else {
+            return null;
+        }
+
     }
 
     void SetTilesFromCells(Vector3Int visiblePosition)

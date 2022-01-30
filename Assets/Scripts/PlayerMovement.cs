@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
             currentHoldWait = holdWait; // reset the waiting time when there's a successful movement.
 
             var targetTilePosition = Vector3Int.FloorToInt(transform.position) + Vector3Int.RoundToInt(direction);
-            var (isWalkable, item) = Services.Get<DungeonService>().dungeon[targetTilePosition];
+            var (isWalkable, ground) = Services.Get<DungeonService>().dungeon[targetTilePosition];
 
             if (!isWalkable) { return; }
 
@@ -60,9 +60,9 @@ public class PlayerMovement : MonoBehaviour
 
             transform.position = targetTilePosition;
 
-            if (item.HasValue)
+            if (ground?.item is Item item)
             {
-                switch (item.Value.itemType)
+                switch (item.itemType)
                 {
                     case ItemType.Exit:
                         Services.Get<UIService>().ShowGlyphScreen();
