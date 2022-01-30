@@ -106,7 +106,7 @@ public class UIService : Services.Service
         // Reset error text
         codeError.text = String.Empty;
 
-        var code = codeInput.value;
+        var code = codeInput.value.ToUpper();
 
         if (IsValidCode((code)))
         {
@@ -203,7 +203,7 @@ public class UIService : Services.Service
 
     private static bool IsValidCode(string code)
     {
-        Regex r = new Regex(@"^[A-Fa-f0-9]{4}$");
-        return r.IsMatch(code);
+        Regex r = new Regex(@"^[A-Fa-f0-9xXyYwW]{4}$");
+        return r.IsMatch(code.Trim());
     }
 }

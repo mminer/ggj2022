@@ -9,11 +9,29 @@ public static class GameCodeUtility
     {
         var seed = Random.Range(0, maxSeed);
         Random.InitState(seed);
-        return seed.ToString("X4");
+        var hexCode = seed.ToString("X4");
+        return ConvertHexToUnambiguousCharacters(hexCode);
     }
 
     public static int GetSeedFromGameCode(string gameCode)
     {
-        return int.Parse(gameCode, NumberStyles.HexNumber);
+        var hexCode = ConvertUnambiguousCharactersToHex(gameCode);
+        return int.Parse(hexCode, NumberStyles.HexNumber);
+    }
+
+    private static string ConvertHexToUnambiguousCharacters(string hexCode)
+    {
+        var unambiguous = hexCode.Replace('0', 'X');
+        unambiguous = unambiguous.Replace('B', 'Y');
+        unambiguous = unambiguous.Replace('5', 'W');
+        return unambiguous;
+    }
+
+    private static string ConvertUnambiguousCharactersToHex(string unambiguous)
+    {
+        var hexCode = unambiguous.Replace('X', '0');
+        hexCode = hexCode.Replace('Y', 'B');
+        hexCode = hexCode.Replace('W', '5');
+        return hexCode;
     }
 }
