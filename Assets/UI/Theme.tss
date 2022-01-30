@@ -80,8 +80,8 @@
 }
 
 /* Join Game Screen */
-#join-title, #join-inputs-instructions {
-    color: white;
+#join .subtitle {
+    color: green;
 }
 
 #join-inputs {
@@ -97,7 +97,7 @@
 
 #join-inputs Button {
     width: 200px;
-    margin: 15px 0;
+    margin-top: 30px;
 }
 
 #join-inputs-error {

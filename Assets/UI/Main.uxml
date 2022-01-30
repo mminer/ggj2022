@@ -20,9 +20,9 @@
     </ui:VisualElement>
     <ui:VisualElement name="join" class="screen full-screen">
         <ui:Button name="join-back" class="button" text="...Back" />
-        <ui:Label name="join-title" class="title" text="Join Existing Game" />
+        <ui:Label class="title" text="Join Friend" />
+        <ui:Label class="subtitle" text="Enter 4-digit game code" />
         <ui:VisualElement name="join-inputs">
-            <ui:Label name="join-inputs-instructions" text="Enter 4-digit game code" />
             <ui:TextField name="join-inputs-code" max-length="4" />
             <ui:Button name="join-inputs-button" class="button" text="Join with Code" />
             <ui:Label name="join-inputs-error" text="" />
