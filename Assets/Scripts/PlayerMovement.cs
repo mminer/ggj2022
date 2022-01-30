@@ -103,11 +103,13 @@ public class PlayerMovement : MonoBehaviour
         Services.Get<AudioService>().PlayTrap(ItemType.Monster);
 
         var dungeonService = Services.Get<DungeonService>();
+        var monsterSprite = dungeonService.SpriteAt(position);
+        
         dungeonService.BloodSplat(position);
 
         yield return new WaitForSeconds(bloodyDelay);
 
-        Services.Get<UIService>().monsterSprite = dungeonService.SpriteAt(position);
+        Services.Get<UIService>().monsterSprite = monsterSprite;
         Services.Get<GameService>().EndGame(EndCondition.AteByMonster);
     }
 
