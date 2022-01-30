@@ -493,6 +493,10 @@ PrefabInstance:
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 1760482963}
+    - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: overrideItemVisibility
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4943750545281595632, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -551,6 +555,10 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: c3c11e0c51834486e834ee6f04ad2423, type: 3}
     - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: loseJingle
+      value: 
+      objectReference: {fileID: 8300000, guid: a25173137f92243318906be5c255814b, type: 3}
+    - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: badPasscode
       value: 
       objectReference: {fileID: 8300000, guid: a25173137f92243318906be5c255814b, type: 3}
     - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}

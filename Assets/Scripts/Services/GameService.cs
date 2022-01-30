@@ -106,6 +106,12 @@ public class GameService : Services.Service
     private void OnSubmitGlyphs(int[] glyphs)
     {
         var endCondition = ValidateGlyphs(glyphs) ? EndCondition.Won : EndCondition.BadPasscode;
+
+        if (endCondition == EndCondition.BadPasscode)
+        {
+            Services.Get<AudioService>().PlayBadPasscodeJingle();
+        }
+
         EndGame(endCondition);
     }
 }
