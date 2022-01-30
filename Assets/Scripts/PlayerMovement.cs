@@ -71,6 +71,11 @@ public class PlayerMovement : MonoBehaviour
                         Services.Get<UIService>().ShowGlyphScreen();
                         break;
 
+                    case ItemType.Monument:
+                        Services.Get<AudioService>().PlayMonumentJingle();
+                        Services.Get<UIService>().ShowMonumentScreen();
+                        break;
+
                     case ItemType.Monster:
                         Services.Get<AudioService>().PlayTrap(ItemType.Monster);
                         Services.Get<GameService>().EndGame(EndCondition.AteByMonster);

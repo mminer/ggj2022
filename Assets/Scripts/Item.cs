@@ -22,5 +22,5 @@ public enum ItemType
     Monster,
     Pit,
     Weapon,
-    Passcode,
+    Monument,
 }

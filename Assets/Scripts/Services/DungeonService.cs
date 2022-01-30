@@ -26,6 +26,7 @@ public class DungeonService : Services.Service
     [SerializeField] TileBase exitTile;
     [SerializeField] TileBase groundTile;
     [SerializeField] TileBase monsterTile;
+    [SerializeField] TileBase monumentTile;
     [SerializeField] TileBase pitTile;
     [SerializeField] TileBase wallTile;
     [SerializeField] TileBase waterTile;
@@ -45,6 +46,7 @@ public class DungeonService : Services.Service
         {
             { ItemType.Monster, monsterCount },
             { ItemType.Pit, pitCount },
+            { ItemType.Monument, 1 },
         };
 
         dungeon = new Dungeon(gameCode, width, height, maxRooms, roomMaxSize, roomMinSize, itemCounts, maxLights);
@@ -68,6 +70,7 @@ public class DungeonService : Services.Service
             {
                 ItemType.Door => throw new NotImplementedException(),
                 ItemType.Exit => exitTile,
+                ItemType.Monument => monumentTile,
                 ItemType.Key => throw new NotImplementedException(),
                 ItemType.Monster => monsterTile,
                 ItemType.Pit => pitTile,

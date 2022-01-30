@@ -23,6 +23,7 @@ public class AudioService : Services.Service
 
     [Header("== Jingles ==")]
     [SerializeField] private AudioClip winJingle;
+    [SerializeField] private AudioClip monumentJingle;
     [SerializeField] private AudioClip badPasscode;
 
     void Awake()
@@ -50,6 +51,11 @@ public class AudioService : Services.Service
     public void PlayBadPasscodeJingle()
     {
         PlaySoundEffect(badPasscode);
+    }
+
+    public void PlayMonumentJingle()
+    {
+        PlaySoundEffect(monumentJingle);
     }
 
     public void PlayFootstep()

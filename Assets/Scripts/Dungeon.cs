@@ -119,6 +119,10 @@ public class Dungeon
                 case ItemType.Pit:
                     PlacePits(count);
                     break;
+
+                case ItemType.Monument:
+                    PlaceMonument();
+                    break;
             }
         }
 
@@ -268,6 +272,34 @@ public class Dungeon
         }
     }
 
+    /// <summary>
+    /// Finds an empty spot on the map that the player can reach.
+    /// </summary>
+    Cell GetRandomEmptyCellThatPlayerCanReach()
+    {
+        while (true)
+        {
+            var cell = GetRandomEmptyCell();
+
+            var obstacles = map
+                .GetAllCells()
+                .Where(c => c.Item.HasValue && c.Item.Value.itemType != ItemType.Exit)
+                .Select(c => new Point(c.X, c.Y));
+
+            goalMap.ClearObstacles();
+            goalMap.AddObstacles(obstacles);
+            var monumentPosition = cell.Position;
+            var path = goalMap.TryFindPath(monumentPosition.x, monumentPosition.y);
+
+            if (path == null)
+            {
+                continue;
+            }
+
+            return cell;
+        }
+    }
+
     bool IsCellEmpty(Cell cell)
     {
         return cell.IsWalkable && !cell.Item.HasValue && cell.Position != entrancePosition;
@@ -314,6 +346,13 @@ public class Dungeon
 
             placedLights++;
         }
+    }
+
+    void PlaceMonument()
+    {
+        var cell = GetRandomEmptyCellThatPlayerCanReach();
+        cell.GroundType = GroundType.Grass;
+        cell.Item = new Item(ItemType.Monument, cell.Position, PlayerType.Both);
     }
 
     public void RegenerateVisible(Vector3Int at, int radius)
