@@ -17,7 +17,7 @@ public class Dungeon
     public readonly int[] glyphs;
 
     readonly List<Cell> emptyCells;
-    readonly Ground?[,] ground;
+    readonly Ground[,] ground;
     readonly Map map;
     readonly FieldOfView fov;
     public Dungeon.Light[] lights { private set; get; }
@@ -46,7 +46,7 @@ public class Dungeon
 
     public Dungeon(string gameCode, int width, int height, int maxRooms, int roomMaxSize, int roomMinSize, Dictionary<ItemType, int> itemCounts, int maxLights)
     {
-        ground = new Ground?[width, height];
+        ground = new Ground[width, height];
         rng = new RandomNumberGenerator(gameCode);
 
         // Glyphs
@@ -99,9 +99,9 @@ public class Dungeon
         var entrancePositionPossibilities = new[] { bottomLeft, bottomRight, topLeft, topRight };
         entrancePosition = entrancePositionPossibilities[rng.Next(entrancePositionPossibilities.Length)];
         CarvePathToEmptyTile(entrancePosition, GetPathCarveDirection(entrancePosition));
-        
+
         RemoveEmptyCell(entrancePosition);
-        
+
         var riverStart = entrancePositionPossibilities[rng.Next(entrancePositionPossibilities.Length)];
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
@@ -119,7 +119,7 @@ public class Dungeon
         };
 
         CarvePathToEmptyTile(exitPosition, GetPathCarveDirection(exitPosition));
-        var item = new Item(ItemType.Exit, PlayerType.Both);
+        var item = new Item(ItemType.Exit, exitPosition, PlayerType.Both);
         SetGround(exitPosition, GroundType.Grass, item);
 
         // Item positions:
@@ -163,6 +163,42 @@ public class Dungeon
         return string.Join(Environment.NewLine, rows);
     }
 
+    public void UpdateMovableItems()
+    {
+        foreach (var (item, position) in EnumerateItems())
+        {
+            if (item.itemType != ItemType.Monster)
+            {
+                continue;
+            }
+
+            if (position != item.originalPosition)
+            {
+                ground[item.originalPosition.x, item.originalPosition.y].item = item;
+                ground[position.x, position.y].item = null;
+            }
+            else
+            {
+                var adjacentCells = map
+                    .GetAdjacentCells(position.x, position.y)
+                    .Where(cell => cell.IsWalkable)
+                    .ToArray();
+
+                var randomAdjacentCell = adjacentCells[rng.Next(adjacentCells.Length)];
+
+                if (ground[randomAdjacentCell.X, randomAdjacentCell.Y].item.HasValue)
+                {
+                    continue;
+                }
+
+                ground[item.originalPosition.x, item.originalPosition.y].item = null;
+                ground[randomAdjacentCell.X, randomAdjacentCell.Y].item = item;
+            }
+
+            Debug.Log("Update Movable Items");
+        }
+    }
+
     void CarvePathToEmptyTile(Vector3Int position, Vector3Int direction)
     {
         var iteration = 0;
@@ -172,7 +208,7 @@ public class Dungeon
             var cell = map[position.x, position.y];
             cell.IsTransparent = true;
             cell.IsWalkable = true;
-            
+
             SetGround(position, GroundType.Grass, null);
 
             if (iteration % 2 == 0)
@@ -187,7 +223,7 @@ public class Dungeon
             iteration++;
         }
     }
-    
+
     void CarveRiver(Vector3Int position, Vector3Int direction)
     {
         var iteration = 0;
@@ -205,6 +241,25 @@ public class Dungeon
             position.y += rng.Next(2) * direction.y;
 
             iteration++;
+        }
+    }
+
+    IEnumerable<(Item, Vector3Int)> EnumerateItems()
+    {
+        for (var x = 0; x < map.Width; x++)
+        {
+            for (var y = 0; y < map.Height; y++)
+            {
+                var item = ground[x, y].item;
+
+                if (!item.HasValue)
+                {
+                    continue;
+                }
+
+                var position = new Vector3Int(x, y);
+                yield return (item.Value, position);
+            }
         }
     }
 
@@ -261,7 +316,7 @@ public class Dungeon
         {
             var position = GetRandomWalkablePositionThatPlayerCanCircumvent();
             var visibleToPlayer1 = rng.NextBool();
-            var item = new Item(ItemType.Monster, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
+            var item = new Item(ItemType.Monster, position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
             SetGround(position, GroundType.Grass, item);
             placedMonsters++;
         }
@@ -275,7 +330,7 @@ public class Dungeon
         {
             var position = GetRandomWalkablePositionThatPlayerCanCircumvent();
             var visibleToPlayer1 = rng.NextBool();
-            var item = new Item(ItemType.Pit, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
+            var item = new Item(ItemType.Pit, position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
             SetGround(position, GroundType.Grass, item);
             placedPits++;
         }
