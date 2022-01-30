@@ -62,6 +62,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultScreenName: title
+  pitSprite: {fileID: 0}
+  monsterSprite: {fileID: 0}
+  monumentSprite: {fileID: 0}
+  exitSprite: {fileID: 0}
 --- !u!1 &4287173784685381179
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +376,7 @@ MonoBehaviour:
   exitTile: {fileID: 11400000, guid: 90ecafb30a63942a79581c8997b24208, type: 2}
   groundTile: {fileID: 11400000, guid: 462d93337d9e7490fbdbd4be836957d2, type: 2}
   monsterTile: {fileID: 11400000, guid: f8b19bc7d4f1f4c229bd8aa9827ae4ac, type: 2}
-  monumentTile: {fileID: 11400000, guid: e569df902ba1c4e489182fc20b258462, type: 2}
+  monumentTile: {fileID: 11400000, guid: 96d0b4ad5f1d45742a3382b5b9802928, type: 2}
   pitTile: {fileID: 11400000, guid: 388a35475f2b041bb91fdc1f652a4b8e, type: 2}
   wallTile: {fileID: 11400000, guid: 84acdd3ad9c403347805267ee70bd232, type: 2}
   waterTile: {fileID: 11400000, guid: 8ab15f863ae6f6543801bd249a4271ed, type: 2}
