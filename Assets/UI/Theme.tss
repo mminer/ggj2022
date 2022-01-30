@@ -46,6 +46,12 @@
     color: black;
 }
 
+.row {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Title Screen */
 #title-label {
     color: red;
@@ -86,7 +92,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    background-color: rgba(0, 0, 0, 150);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #game-quit {
@@ -119,6 +125,7 @@
     white-space: normal;
     -unity-text-align: middle-center;
     font-size: 18px;
+    color: green;
 }
 
 /* Glyphs */
@@ -190,6 +197,7 @@
     display: none;
 }
 
+/* Monument */
 #monument .subtitle {
     color: green;
 }
@@ -211,4 +219,33 @@
     border-width: 1px;
     border-color: black;
     border-radius: 3px;
+}
+
+/* Wait for friend */
+#wait {
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+#wait .title {
+    color: yellow;
+}
+
+#wait .subtitle {
+    color: green;
+}
+
+#wait Image, #instructions-rules Image {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+}
+
+#wait-begin {
+    margin-top: 15px;
+}
+
+#wait-instructions, #instructions-rules {
+    font-size: 20px;
 }

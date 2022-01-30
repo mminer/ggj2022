@@ -9,6 +9,10 @@ using Random = UnityEngine.Random;
 public class UIService : Services.Service
 {
     [SerializeField] string defaultScreenName;
+    [SerializeField] Sprite pitSprite;
+    [SerializeField] Sprite monsterSprite;
+    [SerializeField] Sprite monumentSprite;
+    [SerializeField] Sprite exitSprite;
 
     public delegate void OnSubmitGlyphsHandler(int[] combo);
     public event OnSubmitGlyphsHandler OnSubmitGlyphs;
@@ -29,6 +33,7 @@ public class UIService : Services.Service
         gameService.OnGameStarted += (code) =>
         {
             rootVisualElement.Q<Label>("game-code").text = "Code: " + code;
+            rootVisualElement.Q<Label>("wait-code").text = code;
             Debug.Log("Game Code: " + code);
         };
 
@@ -74,7 +79,7 @@ public class UIService : Services.Service
         rootVisualElement.Q<Button>("title-buttons-create").clicked += () =>
         {
             Services.Get<GameService>().StartGame();
-            ShowScreen("game");
+            ShowScreen("wait");
         };
 
         // Glyph events
@@ -85,6 +90,31 @@ public class UIService : Services.Service
             var myGlyph = Services.Get<GameService>().MyPlayerGlyph();
             OnSubmitGlyphs?.Invoke(new int[] { myGlyph, inputGlyph });
         };
+
+        // Waiting screen
+        rootVisualElement.Query<Image>(className: "pit-image").ForEach((i) => i.sprite = pitSprite);
+        rootVisualElement.Query<Image>(className: "monster-image").ForEach((i) => i.sprite = monsterSprite);
+        rootVisualElement.Query<Image>(className: "monument-image").ForEach((i) => i.sprite = monumentSprite);
+        rootVisualElement.Query<Image>(className: "exit-image").ForEach((i) => i.sprite = exitSprite);
+        var beginAdventureButton = rootVisualElement.Q<Button>("wait-begin");
+        beginAdventureButton.clicked += () => { ShowScreen("game"); };
+        beginAdventureButton.RegisterCallback<KeyUpEvent>(e =>
+        {
+            switch (e.keyCode)
+            {
+                case KeyCode.W:
+                case KeyCode.A:
+                case KeyCode.S:
+                case KeyCode.D:
+                case KeyCode.UpArrow:
+                case KeyCode.DownArrow:
+                case KeyCode.LeftArrow:
+                case KeyCode.RightArrow:
+                case KeyCode.Return:
+                    ShowScreen("game");
+                    break;
+            }
+        });
 
         // Join game events
         var codeError = rootVisualElement.Q<Label>("join-inputs-error");
