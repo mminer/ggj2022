@@ -84,9 +84,15 @@
     color: white;
 }
 
+#join-inputs {
+    justify-content: center;
+    align-items: center;
+}
+
 #join-inputs-code {
-    width: 200px;
+    width: 90px;
     color: black;
+    font-size: 24px;
 }
 
 #join-inputs Button {
