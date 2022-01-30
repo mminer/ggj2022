@@ -10,15 +10,20 @@ using UnityEngine;
 /// </summary>
 public class Dungeon
 {
+    public class Cell : RogueSharp.Cell
+    {
+        public GroundType GroundType { get; set; }
+        public Item? Item { get; set; }
+        public Vector3Int Position => new(X, Y);
+    }
+
     public readonly Vector3Int entrancePosition;
     public readonly int[] glyphs;
+    public Light[] lights { private set; get; }
 
-    readonly List<Cell> emptyCells;
-    readonly GoalMap goalMap;
-    readonly Ground[,] ground;
-    readonly Map map;
-    readonly FieldOfView fov;
-    public Dungeon.Light[] lights { private set; get; }
+    readonly FieldOfView<Cell> fov;
+    readonly GoalMap<Cell> goalMap;
+    readonly Map<Cell> map;
     readonly RandomNumberGenerator rng;
 
     // Four corners inside the walls.
@@ -28,12 +33,12 @@ public class Dungeon
     Vector3Int topRight => new(map.Width - 2, map.Height - 2);
 
     public struct Light {
-        private FieldOfView fov;
+        private FieldOfView<Cell> fov;
         public readonly Vector3Int point;
         public readonly int radius;
 
-        public Light(Vector3Int point, int radius, Map map) {
-            fov = new FieldOfView(map);
+        public Light(Vector3Int point, int radius, Map<Cell> map) {
+            fov = new FieldOfView<Cell>(map);
             this.radius = radius;
             this.point = point;
             fov.ComputeFov(point.x, point.y, radius, true);
@@ -44,13 +49,10 @@ public class Dungeon
         }
     }
 
-    public (bool isWalkable, Ground? ground) this[Vector3Int position] => (
-        map[position.x, position.y].IsWalkable,
-        ground[position.x, position.y]);
+    public Cell this[Vector3Int position] => map[position];
 
     public Dungeon(string gameCode, int width, int height, int maxRooms, int roomMaxSize, int roomMinSize, Dictionary<ItemType, int> itemCounts, int maxLights)
     {
-        ground = new Ground[width, height];
         rng = new RandomNumberGenerator(gameCode);
 
         // Glyphs
@@ -64,7 +66,7 @@ public class Dungeon
 
         Debug.Log($"Required glyphs: {glyphs[0]}, {glyphs[1]}");
 
-        var mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map>(
+        var mapCreationStrategy = new RandomRoomsMapCreationStrategy<Map<Cell>, Cell>(
             width,
             height,
             maxRooms,
@@ -73,17 +75,16 @@ public class Dungeon
             rng);
 
         map = Map.Create(mapCreationStrategy);
-        emptyCells = new List<Cell>();
-        goalMap = new GoalMap(map);
+        goalMap = new GoalMap<Cell>(map);
 
-        foreach(var cell in map.GetAllCells()) {
-            SetGround(new Vector3Int(cell.X, cell.Y, 0), cell.IsWalkable ? GroundType.Grass : GroundType.Wall, null);
+        foreach (var cell in map.GetAllCells())
+        {
+            cell.GroundType = cell.IsWalkable ? GroundType.Grass : GroundType.Wall;
         }
 
         // Entrance position.
         entrancePosition = GetRandomCornerPosition();
         CarvePathToEmptyTile(entrancePosition, GetPathCarveDirection(entrancePosition));
-        RemoveEmptyCell(entrancePosition);
 
         var riverStart = GetRandomCornerPosition();
         CarveRiver(riverStart, GetPathCarveDirection(riverStart));
@@ -99,9 +100,11 @@ public class Dungeon
         } while (exitPosition == entrancePosition);
 
         CarvePathToEmptyTile(exitPosition, GetPathCarveDirection(exitPosition));
-        var item = new Item(ItemType.Exit, exitPosition, PlayerType.Both);
-        SetGround(exitPosition, GroundType.Grass, item);
         goalMap.AddGoal(exitPosition.x, exitPosition.y, 1);
+
+        var exitCell = map[exitPosition];
+        exitCell.GroundType = GroundType.Grass;
+        exitCell.Item = new Item(ItemType.Exit, exitPosition, PlayerType.Both);
 
         // Item positions:
 
@@ -119,49 +122,39 @@ public class Dungeon
             }
         }
 
-        fov = new FieldOfView(map);
+        fov = new FieldOfView<Cell>(map);
 
         PlaceLights(rng.Next(maxLights));
     }
 
-    public override string ToString()
-    {
-        // RogueSharp's map origin starts in the top-left while Unity's starts at the bottom-left,
-        // so we need to flip its output to see a representation that matches our tilemap.
-        var rows = map.ToString().Split(Environment.NewLine).Reverse();
-        return string.Join(Environment.NewLine, rows);
-    }
+    public override string ToString() => map.ToString();
 
     public void UpdateMovableItems()
     {
-        foreach (var (item, position) in EnumerateItems())
-        {
-            if (item.itemType != ItemType.Monster)
-            {
-                continue;
-            }
+        var cellsWithMonsters = map
+            .GetAllCells()
+            .Where(cell => cell.Item is { itemType: ItemType.Monster });
 
-            if (position != item.originalPosition)
+        foreach (var cell in cellsWithMonsters)
+        {
+            var item = cell.Item!.Value;
+
+            if (cell.Position != item.originalPosition)
             {
-                ground[item.originalPosition.x, item.originalPosition.y].item = item;
-                ground[position.x, position.y].item = null;
+                map[item.originalPosition].Item = item;
+                cell.Item = null;
             }
             else
             {
-                var adjacentCells = map
-                    .GetAdjacentCells(position.x, position.y)
-                    .Where(cell => cell.IsWalkable)
-                    .ToArray();
+                var emptyAdjacentCell = GetRandomEmptyAdjacentCell(cell);
 
-                var randomAdjacentCell = adjacentCells[rng.Next(adjacentCells.Length)];
-
-                if (ground[randomAdjacentCell.X, randomAdjacentCell.Y].item.HasValue)
+                if (emptyAdjacentCell == null)
                 {
                     continue;
                 }
 
-                ground[item.originalPosition.x, item.originalPosition.y].item = null;
-                ground[randomAdjacentCell.X, randomAdjacentCell.Y].item = item;
+                map[item.originalPosition].Item = null;
+                emptyAdjacentCell.Item = item;
             }
         }
     }
@@ -170,13 +163,12 @@ public class Dungeon
     {
         var iteration = 0;
 
-        while (!map[position.x, position.y].IsWalkable)
+        while (!map.IsWalkable(position))
         {
-            var cell = map[position.x, position.y];
+            var cell = map[position];
+            cell.GroundType = GroundType.Grass;
             cell.IsTransparent = true;
             cell.IsWalkable = true;
-
-            SetGround(position, GroundType.Grass, null);
 
             if (iteration % 2 == 0)
             {
@@ -197,36 +189,17 @@ public class Dungeon
 
         while (iteration < 100 && position.x < map.Width && position.x >= 0 && position.y < map.Height && position.y >= 0)
         {
-            var cell = map[position.x, position.y];
-
-            if(!cell.IsWalkable){
+            if (!map.IsWalkable(position))
+            {
+                var cell = map[position];
+                cell.GroundType = GroundType.Water;
                 cell.IsTransparent = true;
-                SetGround(position, GroundType.Water, null);
             }
 
             position.x += rng.Next(2) * direction.x;
             position.y += rng.Next(2) * direction.y;
 
             iteration++;
-        }
-    }
-
-    IEnumerable<(Item item, Vector3Int position)> EnumerateItems()
-    {
-        for (var x = 0; x < map.Width; x++)
-        {
-            for (var y = 0; y < map.Height; y++)
-            {
-                var item = ground[x, y].item;
-
-                if (!item.HasValue)
-                {
-                    continue;
-                }
-
-                var position = new Vector3Int(x, y);
-                yield return (item.Value, position);
-            }
         }
     }
 
@@ -249,25 +222,38 @@ public class Dungeon
         return cornerPositions[rng.Next(cornerPositions.Length)];
     }
 
-    Vector3Int GetRandomWalkablePosition()
+    Cell GetRandomEmptyAdjacentCell(Cell cell)
     {
-        var cell = emptyCells[rng.Next(emptyCells.Count)];
-        return new Vector3Int(cell.X, cell.Y);
+        var emptyAdjacentCells = map
+            .GetAdjacentCells(cell.Position)
+            .Where(IsCellEmpty)
+            .ToArray();
+
+        return emptyAdjacentCells.Length > 0
+            ? emptyAdjacentCells[rng.Next(emptyAdjacentCells.Length)]
+            : null;
+    }
+
+    Cell GetRandomEmptyCell()
+    {
+        var emptyCells = map.GetAllCells().Where(IsCellEmpty).ToArray();
+        return emptyCells[rng.Next(emptyCells.Length)];
     }
 
     /// <summary>
     /// Finds an empty spot on the map that the player can walk around to reach the exit.
     /// </summary>
-    Vector3Int GetRandomWalkablePositionThatPlayerCanCircumvent()
+    Cell GetRandomEmptyCellThatPlayerCanCircumvent()
     {
         while (true)
         {
-            var position = GetRandomWalkablePosition();
+            var cell = GetRandomEmptyCell();
 
-            var obstacles = EnumerateItems()
-                .Where(entry => entry.item.itemType != ItemType.Exit)
-                .Select(entry => new Point(entry.position.x, entry.position.y))
-                .Concat(new[] { new Point(position.x, position.y) });
+            var obstacles = map
+                .GetAllCells()
+                .Where(c => c.Item.HasValue && c.Item.Value.itemType != ItemType.Exit)
+                .Select(c => new Point(c.X, c.Y))
+                .Concat(new[] { new Point(cell.X, cell.Y) });
 
             goalMap.ClearObstacles();
             goalMap.AddObstacles(obstacles);
@@ -278,8 +264,13 @@ public class Dungeon
                 continue;
             }
 
-            return position;
+            return cell;
         }
+    }
+
+    bool IsCellEmpty(Cell cell)
+    {
+        return cell.IsWalkable && !cell.Item.HasValue && cell.Position != entrancePosition;
     }
 
     void PlaceMonsters(int monsterCount)
@@ -288,10 +279,9 @@ public class Dungeon
 
         while (placedMonsters < monsterCount)
         {
-            var position = GetRandomWalkablePositionThatPlayerCanCircumvent();
+            var cell = GetRandomEmptyCellThatPlayerCanCircumvent();
             var visibleToPlayer1 = rng.NextBool();
-            var item = new Item(ItemType.Monster, position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
-            SetGround(position, GroundType.Grass, item);
+            cell.Item = new Item(ItemType.Monster, cell.Position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
             placedMonsters++;
         }
     }
@@ -302,10 +292,9 @@ public class Dungeon
 
         while (placedPits < pitCount)
         {
-            var position = GetRandomWalkablePositionThatPlayerCanCircumvent();
+            var cell = GetRandomEmptyCellThatPlayerCanCircumvent();
             var visibleToPlayer1 = rng.NextBool();
-            var item = new Item(ItemType.Pit, position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
-            SetGround(position, GroundType.Grass, item);
+            cell.Item = new Item(ItemType.Pit, cell.Position, visibleToPlayer1 ? PlayerType.Player1 : PlayerType.Player2);
             placedPits++;
         }
     }
@@ -318,8 +307,8 @@ public class Dungeon
 
         while (placedLights < lightCount)
         {
-            var position = GetRandomWalkablePosition();
-            var light = new Dungeon.Light(position, rng.Next(5) + 2, map);
+            var cell = GetRandomEmptyCell();
+            var light = new Dungeon.Light(cell.Position, rng.Next(5) + 2, map);
 
             lights = lights.Append(light).ToArray();
 
@@ -336,20 +325,4 @@ public class Dungeon
     {
         return fov.IsInFov(at.x, at.y);
     }
-
-    void RemoveEmptyCell(Vector3Int position)
-    {
-        var cell = map[position.x, position.y];
-        if(cell != null) emptyCells.Remove(cell);
-    }
-
-    void SetGround(Vector3Int position, GroundType groundType, Item? item)
-    {
-        var cell = map.GetCell(position.x, position.y);
-        ground[cell.X, cell.Y] = new Ground(groundType, item);
-
-        RemoveEmptyCell(position);
-        if(item == null && cell.IsWalkable) { emptyCells.Add(cell); }
-    }
-
 }

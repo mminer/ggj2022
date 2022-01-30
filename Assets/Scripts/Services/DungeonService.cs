@@ -60,9 +60,9 @@ public class DungeonService : Services.Service
 
     TileBase GetTile(Vector3Int tilePosition, PlayerType playerAssignment)
     {
-        var (isWalkable, ground) = dungeon[tilePosition];
+        var cell = dungeon[tilePosition];
 
-        if (ground?.item is Item item && IsItemVisible(item, playerAssignment))
+        if (cell.Item is Item item && IsItemVisible(item, playerAssignment))
         {
             return item.itemType switch
             {
@@ -75,9 +75,9 @@ public class DungeonService : Services.Service
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }
-        else if(ground is Ground nonNullGround)
+        else
         {
-            return nonNullGround.groundType switch
+            return cell.GroundType switch
             {
                 GroundType.Wall => wallTile,
                 GroundType.Water => waterTile,
@@ -85,10 +85,6 @@ public class DungeonService : Services.Service
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }
-        else {
-            return null;
-        }
-
     }
 
     bool IsItemVisible(Item item, PlayerType playerAssignment)
