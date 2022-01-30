@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
                         break;
 
                     case ItemType.Monster:
-                        StartCoroutine(MonsterDeath(0.4f));
+                        StartCoroutine(MonsterDeath(cell.Item.Value.playerVisibility, 0.4f));
                         break;
 
                     case ItemType.Pit:
@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    IEnumerator MonsterDeath(float bloodyDelay)
+    IEnumerator MonsterDeath(PlayerType enemyVisibility, float bloodyDelay)
     {
         var position = Vector3Int.FloorToInt(transform.position);
 
@@ -103,13 +103,15 @@ public class PlayerMovement : MonoBehaviour
         Services.Get<AudioService>().PlayTrap(ItemType.Monster);
 
         var dungeonService = Services.Get<DungeonService>();
-        var monsterSprite = dungeonService.SpriteAt(position);
-        
+
+        if(enemyVisibility == Services.Get<GameService>().playerAssignment || enemyVisibility == PlayerType.Both) {
+            Services.Get<UIService>().monsterSprite = dungeonService.SpriteAt(position);
+        }
+
         dungeonService.BloodSplat(position);
 
         yield return new WaitForSeconds(bloodyDelay);
 
-        Services.Get<UIService>().monsterSprite = monsterSprite;
         Services.Get<GameService>().EndGame(EndCondition.AteByMonster);
     }
 
