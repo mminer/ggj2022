@@ -132,6 +132,19 @@
     color: red;
 }
 
+#results-hint {
+    font-size: 18px;
+}
+
+#results-sprite {
+    width: 64px;
+    height: 64px;
+}
+
+#results-quit {
+    margin-top: 25px;
+}
+
 /* Instructions */
 #instructions-wrapper {
     width: 600px;
@@ -147,12 +160,14 @@
 }
 
 /* Glyphs */
-#glyphs-title {
-    font-size: 50px;
+#glyphs .title {
+    font-size: 45px;
+    margin-bottom: 0;
 }
 
-#glyphs-warning {
+#glyphs .subtitle {
     color: red;
+    font-size: 25px;
 }
 
 #glyphs-buttons {
@@ -170,7 +185,7 @@
 #glyphs-door {
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
     margin-left: 72px; /* Centers the image better */
     width: 248px;
     height: 328px;
@@ -184,7 +199,6 @@
     align-items: center;
     margin-right: 85px; /* Centers the controls better */
     margin-top: 30px;
-
 }
 
 #glyphs-door-selector Image {

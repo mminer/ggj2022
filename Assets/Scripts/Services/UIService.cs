@@ -59,6 +59,31 @@ public class UIService : Services.Service
             rootVisualElement.Q<Label>("results-message").text = causeOfDeath;
             var title = endCondition == EndCondition.Won ? "You live!" : "Dead!";
             rootVisualElement.Q<Label>("results-title").text = title;
+
+            // Show or hide hint message
+            var hint = rootVisualElement.Q<Label>("results-hint");
+            var diedFromTrapOrEnemy = endCondition != EndCondition.Won && endCondition != EndCondition.BadPasscode;
+            hint.style.display = diedFromTrapOrEnemy ? DisplayStyle.Flex : DisplayStyle.None;
+
+            // Show or hide sprite for cause of death
+            var causeOfDeathSprite = rootVisualElement.Q<Image>("results-sprite");
+
+            if (endCondition != EndCondition.Won)
+            {
+                causeOfDeathSprite.style.display = DisplayStyle.Flex;
+                causeOfDeathSprite.sprite = endCondition switch
+                {
+                    EndCondition.AteByMonster => monsterSprite,
+                    EndCondition.FellInPit => pitSprite,
+                    EndCondition.BadPasscode => rootVisualElement.Q<Image>("glyphs-door-selector-glyph").sprite,
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
+            }
+            else
+            {
+                causeOfDeathSprite.style.display = DisplayStyle.None;
+            }
+
             ShowScreen("results");
         };
 
