@@ -7,13 +7,15 @@ public class AudioService : Services.Service
     AudioSource playerAudioSource;
 
 
-    [Header("== Footsteps ==")]
+    [Header("== Player ==")]
+    [SerializeField] private AudioClip tumble;
     [SerializeField] private float footstepVolume = 0.1f;
     [SerializeField] private AudioClip[] footsteps;
     private int footstepIndex;
 
     [Header("== Traps ==")]
     [SerializeField] private AudioClip pitFall;
+
 
     [Header("== Monsters ==")]
     [SerializeField] private AudioClip[] monsterKilledPlayer;
@@ -62,6 +64,10 @@ public class AudioService : Services.Service
     {
         PlaySoundEffect(footsteps[footstepIndex], footstepVolume);
         footstepIndex = footstepIndex + 1 >= footsteps.Length ? 0 : footstepIndex + 1;
+    }
+    
+    public void PlayTumble() {
+        PlaySoundEffect(tumble, 0.5f);
     }
 
     public void PlayTrap(ItemType trap)
