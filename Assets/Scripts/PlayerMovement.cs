@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     {
         moveAction.performed += OnMove;
         moveAction.canceled += OnDoneMove;
+        this.GetComponentInChildren<AnimationCallback>().OnAnimationComplete += AnimationComplete;
     }
 
     void OnEnable()
@@ -77,11 +78,17 @@ public class PlayerMovement : MonoBehaviour
                         break;
 
                     case ItemType.Pit:
-                        Services.Get<AudioService>().PlayTrap(ItemType.Pit);
-                        Services.Get<GameService>().EndGame(EndCondition.FellInPit);
+                        GetComponentInChildren<Animator>().Play("Fall");
                         break;
                 }
             }
+        }
+    }
+
+    void AnimationComplete(string name) {
+        if(name == "Fall") {
+            Services.Get<AudioService>().PlayTrap(ItemType.Pit);
+            Services.Get<GameService>().EndGame(EndCondition.FellInPit);
         }
     }
 }
