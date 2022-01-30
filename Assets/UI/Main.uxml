@@ -11,6 +11,7 @@
             <ui:Button name="title-buttons-join" class="button" text="Join Game" />
             <ui:Button name="title-buttons-instructions" class="button" text="How to Play" />
         </ui:VisualElement>
+        <ui:Label name="title-credits" text="Created by Matthew Miner, Brad Keys, and Chris Bogie\nGlobal Game Jam 2022" />
     </ui:VisualElement>
     <ui:VisualElement name="join" class="screen full-screen">
         <ui:Button name="join-back" class="button" text="...Back" />
@@ -23,11 +24,29 @@
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="instructions" class="screen full-screen">
-            <ui:VisualElement name="instructions-wrapper">
-                <ui:Button name="instructions-back" class="button" text="...Back" />
-                <ui:Label name="instructions-title" class="title" text="How to Play" />
-                <ui:Label name="instructions-message" text="Player 1 creates a game and shares the game code with a friend (player 2). \nPlayer 2 joins the game using the game code. \n\nEach player experiences the game differently, possibly seeing dangers their friend may not be able to see. \nUse a voice chat program to communicate dangers as you traverse the game to reach the end! \n\nUse the arrow keys or WASD to move." />
+        <ui:VisualElement name="instructions-wrapper">
+            <ui:Button name="instructions-back" class="button" text="...Back" />
+            <ui:Label name="instructions-title" class="title" text="How to Play" />
+            <ui:Label name="instructions-message" text="P1 creates a game and shares the game code with a friend. \nP2 joins using the game code. \n\nPlayers experience the game differently, seeing dangers their friend may not be able to see. \nUse voice chat to communicate dangers." />
+            <ui:VisualElement name="instructions-rules">
+                <ui:Label name="instructions-rules-controls" text="Use arrow keys or WASD to move" />
+                <ui:VisualElement name="instructions-rules-obstacles" class="row">
+                    <ui:Label text="Avoid dangers" />
+                    <ui:VisualElement name="instructions-rules-obstacles-images" class="row">
+                        <ui:Image class="pit-image" />
+                        <ui:Image class="monster-image" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="instructions-rules-monument" class="row">
+                    <ui:Label text="Find your monument" />
+                    <ui:Image class="monument-image" />
+                </ui:VisualElement>
+                <ui:VisualElement name="instructions-rules-escape" class="row">
+                    <ui:Label text="Escape" />
+                    <ui:Image class="exit-image" />
+                </ui:VisualElement>
             </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="results" class="screen full-screen">
         <ui:Label name="results-title" class="title" text="placeholder title" />
@@ -57,5 +76,28 @@
             <ui:Image name="monument-container-glyph" />
         </ui:VisualElement>
         <ui:Button name="monument-close" class="button" text="I shall remember" />
+    </ui:VisualElement>
+    <ui:VisualElement name="wait" class="screen">
+        <ui:Label name="wait-code" class="title" />
+        <ui:Label class="subtitle" text="Share code with friend" />
+        <ui:VisualElement name="wait-instructions">
+            <ui:Label name="wait-instructions-controls" text="Use arrow keys or WASD to move" />
+            <ui:VisualElement name="wait-instructions-obstacles" class="row">
+                <ui:Label text="Avoid dangers" />
+                <ui:VisualElement name="wait-instructions-obstacles-images" class="row">
+                    <ui:Image class="pit-image" />
+                    <ui:Image class="monster-image" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="wait-instructions-monument" class="row">
+                <ui:Label text="Find your monument" />
+                <ui:Image class="monument-image" />
+            </ui:VisualElement>
+            <ui:VisualElement name="wait-instructions-escape" class="row">
+                <ui:Label text="Escape" />
+                <ui:Image class="exit-image" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button name="wait-begin" class="button" text="Begin Adventure" />
     </ui:VisualElement>
 </ui:UXML>
