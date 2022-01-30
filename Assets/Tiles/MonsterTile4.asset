@@ -10,25 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
-  m_Name: MonsterTile
+  m_Name: MonsterTile4
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -1391583301, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
+  m_DefaultSprite: {fileID: 1843437946, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
   m_DefaultGameObject: {fileID: 0}
-  m_DefaultColliderType: 1
+  m_DefaultColliderType: 0
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: -1391583301, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-    - {fileID: -18747925, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-    - {fileID: -1142782742, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
     - {fileID: 1843437946, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
-    - {fileID: -2021530702, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
     m_PerlinScale: 0.5
     m_Output: 1
-    m_ColliderType: 1
+    m_ColliderType: 0
     m_RandomTransform: 2
     m_Neighbors: 
     m_NeighborPositions:
