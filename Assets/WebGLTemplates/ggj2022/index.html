@@ -8,28 +8,51 @@
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width={{{ WIDTH }}} height={{{ HEIGHT }}}></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+    <h2 id="title">{{{ PRODUCT_NAME }}}</h2>
+    <div id="wrapper" style="height: {{{ HEIGHT }}}px;">
+        <div id="unity-container" class="unity-desktop">
+          <canvas id="unity-canvas" width={{{ WIDTH }}} height={{{ HEIGHT }}}></canvas>
+          <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+              <div id="unity-progress-bar-full"></div>
+            </div>
+          </div>
+          <div id="unity-warning"> </div>
+          <div id="unity-footer">
+            <div id="unity-fullscreen-button"></div>
+          </div>
         </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">{{{ PRODUCT_NAME }}}</div>
-      </div>
-        <div id="credits">
-            <h3>Credits</h3>
-            <ul>
-                <li><a href="https://matthewminer.com/">Matthew Miner</a></li>
-                <li><a href="http://bradkeys.com/">Brad Keys</a></li>
-                <li><a href="https://hmwrk.net/">Chris Bogie</a></li>
-            </ul>
-            <h4>Designed and developed during the 2022 <a href="https://globalgamejam.org">Global Game Jam</a></h4>
-        </div>
+    </div>
+    <div id="instructions">
+        <h3>Instructions</h3>
+        <p>
+            Use the <strong>arrow keys</strong> or <strong>WASD</strong> to move.
+        </p>
+        <h4>Getting Started</h4>
+        <p>
+            This is a co-operative 2 player game. Each player must run this in a desktop web-browser
+            and requires a way of easily communicating (voice chat).
+        </p>
+        <p>
+            <strong>Player 1</strong> creates a game and shares the game code with a friend (player 2).
+            <strong>Player 2</strong> joins the game using the game code.
+        </p>
+        <h4>How to Win</h4>
+        <p>
+            Each player experiences the game differently, seeing dangers their friend may not be able to see.
+            Communicate dangers as you traverse the game to reach the exit door.
+            At the exit, players select a combination of glyphs found in their games in order to win.
+        </p>
+    </div>
+    <div id="credits">
+        <h3>Credits</h3>
+        <ul>
+            <li><a href="https://matthewminer.com/">Matthew Miner</a></li>
+            <li><a href="http://bradkeys.com/">Brad Keys</a></li>
+            <li><a href="https://hmwrk.net/">Chris Bogie</a></li>
+        </ul>
+        <h4>Designed and developed during the 2022 <a href="https://globalgamejam.org">Global Game Jam</a></h4>
     </div>
     <script>
       var container = document.querySelector("#unity-container");
