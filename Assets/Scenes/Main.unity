@@ -609,5 +609,21 @@ PrefabInstance:
       propertyPath: footsteps.Array.data[9]
       value: 
       objectReference: {fileID: 8300000, guid: 6fbb74ae11bb547ea8e00d346605b47a, type: 3}
+    - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: monsterKilledPlayer.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: monsterKilledPlayer.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: d3e03fa25965847888aae6ef74e9d578, type: 3}
+    - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: monsterKilledPlayer.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: ff9995bd6afc14727b1d6f0d796d8dbd, type: 3}
+    - target: {fileID: 4943750546903676443, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
+      propertyPath: monsterKilledPlayer.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: a5eb8c2807bd747fd93fef97c5c87a10, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b63d1966db784dd682733e384159c3a, type: 3}

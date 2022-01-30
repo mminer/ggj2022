@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AudioService : Services.Service
 {
@@ -13,6 +14,9 @@ public class AudioService : Services.Service
 
     [Header("== Traps ==")]
     [SerializeField] private AudioClip pitFall;
+
+    [Header("== Monsters ==")]
+    [SerializeField] private AudioClip[] monsterKilledPlayer;
 
     [Header("== UI Buttons ==")]
     [SerializeField] private AudioClip cycleGlyph;
@@ -59,6 +63,7 @@ public class AudioService : Services.Service
         var trapAudioClip = trap switch
         {
             ItemType.Pit => pitFall,
+            ItemType.Monster => monsterKilledPlayer[Random.Range(0, monsterKilledPlayer.Length)],
             _ => null,
         };
 
