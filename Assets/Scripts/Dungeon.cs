@@ -359,6 +359,11 @@ public class Dungeon
     {
         fov.ComputeFov(at.x, at.y, radius, true);
     }
+    
+    public void BloodSplat(Vector3Int at)
+    {
+        map[at].Item = new Item(ItemType.Blood, at, PlayerType.Both);
+    }
 
     public bool isVisible(Vector3Int at)
     {

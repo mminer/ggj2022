@@ -30,6 +30,7 @@ public class DungeonService : Services.Service
     [SerializeField] TileBase pitTile;
     [SerializeField] TileBase wallTile;
     [SerializeField] TileBase waterTile;
+    [SerializeField] TileBase bloodTile;
 
     [SerializeField] private int visibleRadius = 3;
 
@@ -42,6 +43,7 @@ public class DungeonService : Services.Service
 
     public void GenerateDungeon(string gameCode)
     {
+
         var itemCounts = new Dictionary<ItemType, int>
         {
             { ItemType.Monster, monsterCount },
@@ -74,6 +76,7 @@ public class DungeonService : Services.Service
                 ItemType.Key => throw new NotImplementedException(),
                 ItemType.Monster => monsterTile,
                 ItemType.Pit => pitTile,
+                ItemType.Blood => bloodTile,
                 ItemType.Weapon => throw new NotImplementedException(),
                 _ => throw new ArgumentOutOfRangeException(),
             };
@@ -154,6 +157,11 @@ public class DungeonService : Services.Service
 
     public void RegenerateVisible(Vector3Int position) {
         dungeon.RegenerateVisible(position, visibleRadius);
+        SetTilesFromCells(position);
+    }
+    
+    public void BloodSplat(Vector3Int position) {
+        dungeon.BloodSplat(position);
         SetTilesFromCells(position);
     }
 }

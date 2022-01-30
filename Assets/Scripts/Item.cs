@@ -21,6 +21,7 @@ public enum ItemType
     Key,
     Monster,
     Pit,
+    Blood,
     Weapon,
     Monument,
 }

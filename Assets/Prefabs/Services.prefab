@@ -62,6 +62,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultScreenName: title
+  pitSprite: {fileID: -1286408863, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
+  monsterSprite: {fileID: -1391583301, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
+  monumentSprite: {fileID: 21300000, guid: 353c21240f18b9746bf0522f84c2bf80, type: 3}
+  exitSprite: {fileID: -179797286, guid: 55fb9d82364984a5398f322244f4d1fc, type: 3}
 --- !u!1 &4287173784685381179
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a402bbd7871e4fc9920d8a5b69ad3c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tumble: {fileID: 0}
   footstepVolume: 0.1
   footsteps:
   - {fileID: 8300000, guid: ac75a827608814b968f80444065b7496, type: 3}
@@ -213,8 +218,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6a174142129c044ae9ff2a69b3c19ff5, type: 3}
   - {fileID: 8300000, guid: 6fbb74ae11bb547ea8e00d346605b47a, type: 3}
   pitFall: {fileID: 8300000, guid: 58c7b2bd3109b423ca56f2f8beca7a2b, type: 3}
+  monsterKilledPlayer: []
   cycleGlyph: {fileID: 8300000, guid: 6100fffa3432c48579adc5738ca5a91c, type: 3}
   winJingle: {fileID: 0}
+  monumentJingle: {fileID: 0}
+  badPasscode: {fileID: 0}
 --- !u!82 &2191030968172254918
 AudioSource:
   m_ObjectHideFlags: 0
@@ -368,7 +376,12 @@ MonoBehaviour:
   exitTile: {fileID: 11400000, guid: 90ecafb30a63942a79581c8997b24208, type: 2}
   groundTile: {fileID: 11400000, guid: 462d93337d9e7490fbdbd4be836957d2, type: 2}
   monsterTile: {fileID: 11400000, guid: f8b19bc7d4f1f4c229bd8aa9827ae4ac, type: 2}
+  monumentTile: {fileID: 11400000, guid: 96d0b4ad5f1d45742a3382b5b9802928, type: 2}
   pitTile: {fileID: 11400000, guid: 388a35475f2b041bb91fdc1f652a4b8e, type: 2}
   wallTile: {fileID: 11400000, guid: 84acdd3ad9c403347805267ee70bd232, type: 2}
   waterTile: {fileID: 11400000, guid: 8ab15f863ae6f6543801bd249a4271ed, type: 2}
+  bloodTile: {fileID: 11400000, guid: 903a4e40df58e064ba522b6bc6033a56, type: 2}
   visibleRadius: 5
+  disableLighting: 0
+  overrideItemVisibility: 0
+  itemVisibilityOverride: 3
