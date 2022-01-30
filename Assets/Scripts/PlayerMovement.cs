@@ -78,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
                         break;
 
                     case ItemType.Pit:
+                        Services.Get<AudioService>().PlayTumble();
                         GetComponentInChildren<Animator>().Play("Fall");
                         break;
                 }
