@@ -5,8 +5,6 @@ using RogueSharp;
 using RogueSharp.MapCreation;
 using UnityEngine;
 
-
-
 /// <summary>
 /// Represents an environment (a map + items).
 /// </summary>
@@ -17,6 +15,7 @@ public class Dungeon
     public readonly int[] glyphs;
 
     readonly List<Cell> emptyCells;
+    readonly GoalMap goalMap;
     readonly Ground[,] ground;
     readonly Map map;
     readonly FieldOfView fov;
@@ -70,6 +69,7 @@ public class Dungeon
 
         map = Map.Create(mapCreationStrategy);
         emptyCells = new List<Cell>();
+        goalMap = new GoalMap(map);
 
         foreach(var cell in map.GetAllCells()) {
             SetGround(new Vector3Int(cell.X, cell.Y, 0), cell.IsWalkable ? GroundType.Grass : GroundType.Wall, null);
@@ -121,6 +121,7 @@ public class Dungeon
         CarvePathToEmptyTile(exitPosition, GetPathCarveDirection(exitPosition));
         var item = new Item(ItemType.Exit, exitPosition, PlayerType.Both);
         SetGround(exitPosition, GroundType.Grass, item);
+        goalMap.AddGoal(exitPosition.x, exitPosition.y, 1);
 
         // Item positions:
 
@@ -194,8 +195,6 @@ public class Dungeon
                 ground[item.originalPosition.x, item.originalPosition.y].item = null;
                 ground[randomAdjacentCell.X, randomAdjacentCell.Y].item = item;
             }
-
-            Debug.Log("Update Movable Items");
         }
     }
 
@@ -244,7 +243,7 @@ public class Dungeon
         }
     }
 
-    IEnumerable<(Item, Vector3Int)> EnumerateItems()
+    IEnumerable<(Item item, Vector3Int position)> EnumerateItems()
     {
         for (var x = 0; x < map.Width; x++)
         {
@@ -279,15 +278,16 @@ public class Dungeon
     {
         while (true)
         {
-            using var temporaryMap = new PathfindingMap(map, ground);
-
             var position = GetRandomWalkablePosition();
-            map[position.x, position.y].IsWalkable = false;
 
-            var pathFinder = new PathFinder(map);
-            var entranceCell = map[entrancePosition.x, entrancePosition.y];
-            var exitCell = map[exitPosition.x, exitPosition.y];
-            var path = pathFinder.TryFindShortestPath(entranceCell, exitCell);
+            var obstacles = EnumerateItems()
+                .Where(entry => entry.item.itemType != ItemType.Exit)
+                .Select(entry => new Point(entry.position.x, entry.position.y))
+                .Concat(new[] { new Point(position.x, position.y) });
+
+            goalMap.ClearObstacles();
+            goalMap.AddObstacles(obstacles);
+            var path = goalMap.TryFindPath(entrancePosition.x, entrancePosition.y);
 
             if (path == null)
             {
