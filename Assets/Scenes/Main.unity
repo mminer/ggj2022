@@ -500,10 +500,7 @@ PrefabInstance:
     - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: monumentTile
       value: 
-      objectReference: {fileID: 11400000, guid: e569df902ba1c4e489182fc20b258462, type: 2}
-      propertyPath: bloodTile
-      value: 
-      objectReference: {fileID: 11400000, guid: 903a4e40df58e064ba522b6bc6033a56, type: 2}
+      objectReference: {fileID: 11400000, guid: 96d0b4ad5f1d45742a3382b5b9802928, type: 2}
     - target: {fileID: 1781761410, guid: 0b63d1966db784dd682733e384159c3a, type: 3}
       propertyPath: overrideItemVisibility
       value: 0
