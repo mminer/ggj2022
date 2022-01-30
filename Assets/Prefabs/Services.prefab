@@ -377,7 +377,12 @@ MonoBehaviour:
   lightColor: {r: 1, g: 1, b: 1, a: 1}
   exitTile: {fileID: 11400000, guid: 90ecafb30a63942a79581c8997b24208, type: 2}
   groundTile: {fileID: 11400000, guid: 462d93337d9e7490fbdbd4be836957d2, type: 2}
-  monsterTile: {fileID: 11400000, guid: f8b19bc7d4f1f4c229bd8aa9827ae4ac, type: 2}
+  monsterTiles:
+  - {fileID: 11400000, guid: f8b19bc7d4f1f4c229bd8aa9827ae4ac, type: 2}
+  - {fileID: 11400000, guid: 851b76648b59a487d85613430b6ad112, type: 2}
+  - {fileID: 11400000, guid: 210f6c1d99b29414f9e1ef98e59d3f5c, type: 2}
+  - {fileID: 11400000, guid: 80bd3f16e451c4ae2959e7840b03293f, type: 2}
+  - {fileID: 11400000, guid: 5182ac69260514ecf981a40dac66f9d9, type: 2}
   monumentTile: {fileID: 11400000, guid: 96d0b4ad5f1d45742a3382b5b9802928, type: 2}
   pitTile: {fileID: 11400000, guid: 388a35475f2b041bb91fdc1f652a4b8e, type: 2}
   wallTile: {fileID: 11400000, guid: 84acdd3ad9c403347805267ee70bd232, type: 2}

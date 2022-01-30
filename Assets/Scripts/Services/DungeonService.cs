@@ -25,7 +25,7 @@ public class DungeonService : Services.Service
     [Header("Tiles")]
     [SerializeField] TileBase exitTile;
     [SerializeField] TileBase groundTile;
-    [SerializeField] TileBase monsterTile;
+    [SerializeField] TileBase[] monsterTiles;
     [SerializeField] TileBase monumentTile;
     [SerializeField] TileBase pitTile;
     [SerializeField] TileBase wallTile;
@@ -74,7 +74,7 @@ public class DungeonService : Services.Service
                 ItemType.Exit => exitTile,
                 ItemType.Monument => monumentTile,
                 ItemType.Key => throw new NotImplementedException(),
-                ItemType.Monster => monsterTile,
+                ItemType.Monster => monsterTiles[cell.Item.id % monsterTiles.Length],
                 ItemType.Pit => pitTile,
                 ItemType.Blood => bloodTile,
                 ItemType.Weapon => throw new NotImplementedException(),
@@ -159,7 +159,7 @@ public class DungeonService : Services.Service
         dungeon.RegenerateVisible(position, visibleRadius);
         SetTilesFromCells(position);
     }
-    
+
     public void BloodSplat(Vector3Int position) {
         dungeon.BloodSplat(position);
         SetTilesFromCells(position);
