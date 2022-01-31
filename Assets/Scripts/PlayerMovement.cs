@@ -5,13 +5,12 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] InputAction moveAction;
-
-    [SerializeField] private float holdWait = 0.2f;
-    private float currentHoldWait = 0.0f;
-
-    private Vector2 direction = Vector2.zero;
-
+    [SerializeField] float holdWait = 0.2f;
     [SerializeField] GameObject playerVisual;
+
+    float currentHoldWait;
+    Vector2 direction;
+    UIService uiService;
 
     void Awake()
     {
@@ -19,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
         moveAction.canceled += OnDoneMove;
 
         playerVisual.GetComponentInChildren<AnimationCallback>().OnAnimationComplete += AnimationComplete;
+
+        uiService = Services.Get<UIService>();
     }
 
     void OnEnable()
@@ -45,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (uiService.activeScreenName != "game")
+        {
+            return;
+        }
+
         MoveLogic();
         currentHoldWait -= Time.deltaTime;
     }
