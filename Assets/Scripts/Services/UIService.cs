@@ -35,7 +35,7 @@ public class UIService : Services.Service
 
         gameService.OnGameStarted += (code) =>
         {
-            rootVisualElement.Q<Label>("game-code").text = "Code: " + code;
+            rootVisualElement.Q<Label>("game-code").text = code;
             rootVisualElement.Q<Label>("wait-code").text = code;
             Debug.Log("Game Code: " + code);
         };

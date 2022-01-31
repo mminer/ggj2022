@@ -104,11 +104,11 @@
     color: red;
 }
 
-/* Game (HUD) Screen */
+/* Game Screen */
 #game {
     height: 50px;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
 }
