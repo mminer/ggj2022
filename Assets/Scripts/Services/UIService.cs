@@ -20,6 +20,8 @@ public class UIService : Services.Service
     public delegate void OnSubmitGlyphsHandler(int[] combo);
     public event OnSubmitGlyphsHandler OnSubmitGlyphs;
 
+    public string activeScreenName { get; private set; }
+
     List<VisualElement> screens;
     Sprite[] glyphSprites;
 
@@ -198,7 +200,13 @@ public class UIService : Services.Service
 
         foreach (var screen in screens)
         {
-            screen.style.display = screen.name == screenName ? DisplayStyle.Flex : DisplayStyle.None;
+            var isActiveScreen = screen.name == screenName;
+            screen.style.display = isActiveScreen ? DisplayStyle.Flex : DisplayStyle.None;
+
+            if (isActiveScreen)
+            {
+                activeScreenName = screenName;
+            }
         }
     }
 

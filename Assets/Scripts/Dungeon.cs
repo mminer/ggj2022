@@ -33,7 +33,7 @@ public class Dungeon
     Vector3Int bottomRight => new(map.Width - 2, 1);
     Vector3Int topLeft => new(1, map.Height - 2);
     Vector3Int topRight => new(map.Width - 2, map.Height - 2);
-    
+
     Vector3Int middleLeft => new(1, map.Height / 2 - 2);
     Vector3Int middleRight => new(map.Width - 2, map.Height / 2 - 2);
     Vector3Int middleTop => new(map.Width / 2 - 2, map.Height - 2);
@@ -164,11 +164,6 @@ public class Dungeon
                 continue;
             }
 
-            if (cell.Y == 24)
-            {
-                Debug.Log($"MOVE {destinationCell.X}; {cell.X}");
-            }
-
             destinationCell.Item = cell.Item;
             cell.Item = null;
         }
@@ -237,7 +232,7 @@ public class Dungeon
 
             if(posWithin(offsetPos)){ set(offsetPos); }
             if(posWithin(offsetPos2)){ set(offsetPos2); }
-            
+
             position.x += Mathf.Clamp(randomOffset() * direction.x + randomOffset(), -1, 1);
             position.y += Mathf.Clamp(randomOffset() * direction.y + randomOffset(), -1, 1);
 
@@ -269,7 +264,7 @@ public class Dungeon
         var cornerPositions = new[] { bottomLeft, bottomRight, topLeft, topRight };
         return cornerPositions[rng.Next(cornerPositions.Length)];
     }
-    
+
     Vector3Int GetRandomSidePosition()
     {
         var cornerPositions = new[] { bottomLeft, bottomRight, topLeft, topRight, middleLeft, middleRight, middleBottom, middleTop };
